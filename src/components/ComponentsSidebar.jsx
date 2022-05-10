@@ -50,6 +50,10 @@ const ComponentsSidebar = ({
   const spawnObject = (value) => {
     console.log(value);
     unityContext.send("BuildingManager", "SpawnObject", value);
+
+    setTimeout(() => {
+      setComponentsSidebarOpen(false);
+    }, 200);
   };
 
   return (
