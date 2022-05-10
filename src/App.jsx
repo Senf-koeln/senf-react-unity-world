@@ -16,6 +16,8 @@ import {
 } from "senf-atomic-design-system";
 import { ThemeProvider } from "styled-components";
 import { useEffect, useState } from "react";
+import InfoModal from "./components/InfoModal";
+import ContextSidebar from "./components/ContextSidebar";
 
 const unityContext = new UnityContext({
   loaderUrl: "Build/WebGL_Build_v3.loader.js",
@@ -36,23 +38,24 @@ const UnityWrapper = styled.div`
 `;
 const App = () => {
   const [componentsSidebarOpen, setComponentsSidebarOpen] = useState(false);
-  const [objSelected, setIsObjSelected] = useState(true);
+  const [objSelected, setIsObjSelected] = useState(false);
+  const [openContextSidebar, setOpenContextSidebar] = useState(false);
+  const [openInfoModal, setOpenInfoModal] = useState(false);
+
   useEffect(function () {
     unityContext.on("isObjActive", function (isActive) {
       setIsObjSelected(isActive);
       if (isActive) {
         console.log("Object depending on Context Menu is Active");
+        setOpenContextSidebar(true);
       } else if (!isActive) {
+        setOpenContextSidebar(false);
         console.log(
           "Deselection or non Context Menu dependent Object selected"
         );
       }
     });
   }, []);
-
-  function setTag(index) {
-    unityContext.send("BuildingManager", "setTag", index); // 0 = Wohnen; 1= Buero; 2 = Kultur
-  }
 
   function deleteObject() {
     unityContext.send("BuildingManager", "DestroyObject");
@@ -75,6 +78,7 @@ const App = () => {
           unityContext={unityContext}
           componentsSidebarOpen={componentsSidebarOpen}
           setComponentsSidebarOpen={setComponentsSidebarOpen}
+          setOpenInfoModal={setOpenInfoModal}
         />
         <ComponentsSidebar
           unityContext={unityContext}
@@ -84,6 +88,18 @@ const App = () => {
         <UnityWrapper>
           <Unity className="unity-canvas" unityContext={unityContext} />
         </UnityWrapper>
+
+        {openContextSidebar && (
+          <ContextSidebar
+            unityContext={unityContext}
+            openContextSidebar={openContextSidebar}
+          />
+        )}
+
+        <InfoModal
+          openInfoModal={openInfoModal}
+          setOpenInfoModal={setOpenInfoModal}
+        />
       </div>
     </ThemeProvider>
   );

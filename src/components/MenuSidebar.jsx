@@ -41,6 +41,7 @@ const MenuSidebar = ({
   unityContext,
   componentsSidebarOpen,
   setComponentsSidebarOpen,
+  setOpenInfoModal,
 }) => {
   const [visibleMarkers, setVisibleMarkers] = useState(true);
   const [activeView, setActiveView] = useState("SwitchToNormalView");
@@ -57,6 +58,10 @@ const MenuSidebar = ({
   function showMarkers() {
     setVisibleMarkers(true);
     unityContext.send("Canvas", "ShowMarkers");
+  }
+
+  function restart() {
+    unityContext.send("BuildingManager", "restart");
   }
 
   function handInProposal() {
@@ -81,8 +86,13 @@ const MenuSidebar = ({
         />
 
         <FlexWrapper flexDirection="column" gap="10px">
-          <Button variant="secondary" text="Info" icon="infoFill" />
-          <Button variant="secondary" text="Neustart" />
+          <Button
+            variant="secondary"
+            text="Info"
+            icon="infoFill"
+            onClick={() => setOpenInfoModal(true)}
+          />
+          <Button variant="secondary" text="Neustart" onClick={restart} />
         </FlexWrapper>
 
         <Divider margin="30px 0px 30px 0px" />
