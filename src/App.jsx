@@ -18,10 +18,10 @@ import { ThemeProvider } from "styled-components";
 import { useEffect, useState } from "react";
 
 const unityContext = new UnityContext({
-  loaderUrl: "Build/WebGL_Build_v3.loader.js",
-  dataUrl: "Build/WebGL_Build_v3.data",
-  frameworkUrl: "Build/WebGL_Build_v3.framework.js",
-  codeUrl: "Build/WebGL_Build_v3.wasm",
+  loaderUrl: "Build/WebGLBuild_v4.loader.js",
+  dataUrl: "Build/WebGLBuild_v4.data",
+  frameworkUrl: "Build/WebGLBuild_v4.framework.js",
+  codeUrl: "Build/WebGLBuild_v4.wasm",
   webglContextAttributes: {
     preserveDrawingBuffer: true,
   },
