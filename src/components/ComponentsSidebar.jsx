@@ -16,6 +16,9 @@ import {
 import ModelsList from "./ModelsList";
 import FormsList from "./FormsList";
 import MarkersList from "./MarkersList";
+import ModelsIcon from "../assets/interface-icons/Menu-Icon_1.png";
+import FormsIcon from "../assets/interface-icons/Menu-Icon_2.png";
+import SurfacesIcon from "../assets/interface-icons/Menu-Icon_3.png";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -23,9 +26,23 @@ const Wrapper = styled.div`
   width: 400px;
   background-color: #fed957;
   z-index: 9;
-  left: ${({ componentsSidebarOpen }) =>
-    componentsSidebarOpen ? "200px" : "-600px"};
+  left: ${({
+    componentsSidebarOpen,
+    musicDomeDeleted,
+    openInfoModal,
+    openDrawContext,
+  }) =>
+    componentsSidebarOpen &&
+    musicDomeDeleted &&
+    !openInfoModal &&
+    !openDrawContext
+      ? "200px"
+      : "-600px"};
   transition: 0.5s;
+`;
+const InnerWrapper = styled.div`
+  overflow: scroll;
+  height: calc(100vh - 150px);
 `;
 
 const Circle = styled.div`
@@ -44,6 +61,10 @@ const ComponentsSidebar = ({
   unityContext,
   componentsSidebarOpen,
   setComponentsSidebarOpen,
+  startDrawingStreet,
+  musicDomeDeleted,
+  openInfoModal,
+  openDrawContext,
 }) => {
   const [order, setOrder] = useState(1);
 
@@ -57,36 +78,51 @@ const ComponentsSidebar = ({
   };
 
   return (
-    <Wrapper componentsSidebarOpen={componentsSidebarOpen}>
+    <Wrapper
+      componentsSidebarOpen={componentsSidebarOpen}
+      musicDomeDeleted={musicDomeDeleted}
+      openInfoModal={openInfoModal}
+      openDrawContext={openDrawContext}
+    >
       <FlexWrapper width="calc(100% - 40px)" margin="20px">
         <FlexWrapper flexDirection="column" alignItems="center">
           <Circle active={order === 1} onClick={() => setOrder(1)}>
-            <Icon icon="bulb" transform="scale(1.5)" />
+            <img src={ModelsIcon} width="50px" />
           </Circle>
           <Typography variant="bodyBg">Modelle</Typography>
         </FlexWrapper>
         <FlexWrapper flexDirection="column" alignItems="center">
           <Circle active={order === 2} onClick={() => setOrder(2)}>
-            <Icon icon="bulb" transform="scale(1.5)" />
+            <img src={FormsIcon} width="50px" />
           </Circle>
           <Typography variant="bodyBg">Formen</Typography>
         </FlexWrapper>
         <FlexWrapper flexDirection="column" alignItems="center">
           <Circle active={order === 3} onClick={() => setOrder(3)}>
-            <Icon icon="bulb" transform="scale(1.5)" />
+            <img src={SurfacesIcon} width="50px" />
           </Circle>
-          <Typography variant="bodyBg">Marker</Typography>
+          <Typography variant="bodyBg">Flächen</Typography>
         </FlexWrapper>
       </FlexWrapper>
-      <Divider margin="20px" width="calc(100% - 40px)" color="#f8f8f8" />
-
-      {order === 1 ? (
-        <ModelsList spawnObject={spawnObject} />
-      ) : order === 2 ? (
-        <FormsList spawnObject={spawnObject} />
-      ) : (
-        <MarkersList spawnObject={spawnObject} />
-      )}
+      <Divider
+        margin="20px 20px 0px 20px"
+        width="calc(100% - 40px)"
+        color="#f8f8f8"
+      />
+      <InnerWrapper>
+        {order === 1 ? (
+          <ModelsList spawnObject={spawnObject} />
+        ) : order === 2 ? (
+          <FormsList spawnObject={spawnObject} />
+        ) : (
+          <MarkersList
+            setComponentsSidebarOpen={setComponentsSidebarOpen}
+            unityContext={unityContext}
+            spawnObject={spawnObject}
+            startDrawingStreet={startDrawingStreet}
+          />
+        )}
+      </InnerWrapper>
     </Wrapper>
   );
 };

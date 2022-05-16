@@ -39,35 +39,29 @@ const tags = [
 ];
 const MenuSidebar = ({
   unityContext,
+  activeView,
+  setActiveView,
   componentsSidebarOpen,
   setComponentsSidebarOpen,
   setOpenInfoModal,
+  restart,
+  setOpenSaveModal,
 }) => {
-  const [visibleMarkers, setVisibleMarkers] = useState(true);
-  const [activeView, setActiveView] = useState("SwitchToNormalView");
-
+  /*   const [visibleMarkers, setVisibleMarkers] = useState(true);
+   */
   const switchView = (unityCall) => {
     setActiveView(unityCall);
-    unityContext.send("Canvas", unityCall);
+    unityContext.send("BuildingManager", unityCall);
   };
 
-  function hideMarkers() {
-    setVisibleMarkers(false);
-    unityContext.send("Canvas", "HideMarkers");
-  }
-  function showMarkers() {
-    setVisibleMarkers(true);
-    unityContext.send("Canvas", "ShowMarkers");
-  }
-
-  function restart() {
-    unityContext.send("BuildingManager", "restart");
-  }
-
-  function handInProposal() {
-    unityContext.send("Canvas", "TakeScreenshot");
-    unityContext.send("Canvas", "CreateText");
-  }
+  // function hideMarkers() {
+  //   setVisibleMarkers(false);
+  //   unityContext.send("Canvas", "HideMarkers");
+  // }
+  // function showMarkers() {
+  //   setVisibleMarkers(true);
+  //   unityContext.send("Canvas", "ShowMarkers");
+  // }
 
   return (
     <Wrapper>
@@ -89,7 +83,6 @@ const MenuSidebar = ({
           <Button
             variant="secondary"
             text="Info"
-            icon="infoFill"
             onClick={() => setOpenInfoModal(true)}
           />
           <Button variant="secondary" text="Neustart" onClick={restart} />
@@ -106,7 +99,6 @@ const MenuSidebar = ({
         >
           {tags.map(({ name, color, unityCall }) => (
             <Tag
-              icon="dot"
               color={color}
               text={name}
               onClick={() => switchView(unityCall)}
@@ -115,26 +107,33 @@ const MenuSidebar = ({
           ))}
           <RoundedButtonWrapper componentsSidebarOpen={componentsSidebarOpen}>
             <RoundedButton
-              variant="plus"
+              color={!componentsSidebarOpen ? "white" : "rgb(226,183,54)"}
+              icon="plus"
               onClick={() => setComponentsSidebarOpen(!componentsSidebarOpen)}
+              size="big"
+              variant={!componentsSidebarOpen ? "primary" : undefined}
             />
           </RoundedButtonWrapper>
         </FlexWrapper>
         <Divider margin="30px 0px 30px 0px" />
 
-        <Button
+        {/* <Button
           variant="secondary"
           size="small"
           icon={visibleMarkers ? "check" : "dot"}
           text="Marker"
           onClick={visibleMarkers ? showMarkers : hideMarkers}
-        />
+        /> */}
 
         <div style={{ marginTop: "auto" }}>
           <FlexWrapper flexDirection="column" gap="10px">
             <br />
-            <Button variant="secondary" text="Rückgängig" />
-            <Button variant="primary" text="Save" />
+            {/* <Button variant="secondary" text="Rückgängig" /> */}
+            <Button
+              variant="primary"
+              text="Speichern"
+              onClick={() => setOpenSaveModal(true)}
+            />
           </FlexWrapper>
         </div>
       </FlexWrapper>

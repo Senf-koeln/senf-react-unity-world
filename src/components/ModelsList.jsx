@@ -12,59 +12,22 @@ import {
   ObjectCard,
   Tag,
 } from "senf-atomic-design-system";
+import { ModelsData } from "../data/Models";
 
 const tags = [
-  { topic: "Alle", color: "green" },
-  { topic: "Infrastrukur", color: "green" },
-  { topic: "Mobiliar", color: "green" },
-  { topic: "Natur", color: "green" },
-  { topic: "Gebäude", color: "green" },
-  { topic: "Spielen", color: "green" },
-  { topic: "Sport", color: "green" },
+  { objectType: "Alle" },
+  { objectType: "Infrastruktur" },
+  { objectType: "Mobiliar" },
+  { objectType: "Natur" },
+  { objectType: "Gebäude" },
+  { objectType: "Spielen" },
+  { objectType: "Sport" },
 ];
 
-const modelsData = [
-  {
-    topic: "Mobiliar",
-    objectId: "sadasd",
-    title: "Blumenkübel",
-    subTitle: "Kleingarten Sacshen",
-    objectType: "Vereine",
-    imgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/senf-dev.appspot.com/o/organizationsData%2FQO0SOuQBIc9wEjpayU9e%2Flogo%2Flogo?alt=media&token=131ee6fa-19a0-4ee9-b8c0-43909e2373d6",
-  },
-  {
-    topic: "Mobiliar",
-    objectId: "xyz",
-    title: "Blumenkübel 1",
-    subTitle: "Kleingarten Sacshen",
-    objectType: "Vereine",
-    imgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/senf-dev.appspot.com/o/organizationsData%2FQO0SOuQBIc9wEjpayU9e%2Flogo%2Flogo?alt=media&token=131ee6fa-19a0-4ee9-b8c0-43909e2373d6",
-  },
-  {
-    topic: "Infrastrukur",
-    objectId: "sadasd",
-    title: "Blumenkübel",
-    subTitle: "Kleingarten Sacshen",
-    objectType: "Vereine",
-    imgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/senf-dev.appspot.com/o/organizationsData%2FQO0SOuQBIc9wEjpayU9e%2Flogo%2Flogo?alt=media&token=131ee6fa-19a0-4ee9-b8c0-43909e2373d6",
-  },
-  {
-    topic: "Infrastrukur",
-    objectId: "sadasd",
-    title: "Blumenkübel",
-    subTitle: "Kleingarten Sacshen",
-    objectType: "Vereine",
-    imgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/senf-dev.appspot.com/o/organizationsData%2FQO0SOuQBIc9wEjpayU9e%2Flogo%2Flogo?alt=media&token=131ee6fa-19a0-4ee9-b8c0-43909e2373d6",
-  },
-];
 const ModelsList = ({ spawnObject }) => {
-  const [models, setModels] = useState(modelsData);
-  const [topicsSelected, setTopicsSelected] = useState([
-    "Infrastrukur",
+  const [models, setModels] = useState([]);
+  const [objectTypeSelected, setObjectTypeSelected] = useState([
+    "Infrastruktur",
     "Mobiliar",
     "Natur",
     "Gebäude",
@@ -73,33 +36,50 @@ const ModelsList = ({ spawnObject }) => {
   ]);
 
   useEffect(() => {
-    setModels(
-      modelsData?.filter(({ topic }) => topicsSelected.includes(topic))
-    );
-    console.log(modelsData);
-  }, [topicsSelected]);
+    if (ModelsData) {
+      console.log(objectTypeSelected);
+      const NewModels = ModelsData.filter(({ objectType }) =>
+        objectTypeSelected.includes(objectType)
+      );
+      console.log(NewModels);
 
-  const handleTopicSelector = (topic) => {
-    const index = topicsSelected.indexOf(topic);
-    if (topic === "Alle") {
-      setTopicsSelected([
-        "Infrastrukur",
+      if (NewModels) {
+        setModels(NewModels);
+      }
+
+      // setModels(
+      //   ModelsData.filter(({ objectType }) =>
+      //     objectTypeSelected.includes(objectType)
+      //   )
+      // );
+    }
+
+    console.log(models);
+  }, [ModelsData, objectTypeSelected]);
+
+  const handleobjectTypeelector = (objectType) => {
+    const index = objectTypeSelected.indexOf(objectType);
+    if (objectType === "Alle") {
+      setObjectTypeSelected([
+        "Infrastruktur",
         "Mobiliar",
         "Natur",
         "Gebäude",
         "Spielen",
         "Sport",
       ]);
-    } else if (topicsSelected.length === 6) {
-      setTopicsSelected([topic]);
+    } else if (objectTypeSelected.length === 6) {
+      setObjectTypeSelected([objectType]);
     } else if (index === -1) {
-      setTopicsSelected(topicsSelected.concat(topic));
+      setObjectTypeSelected(objectTypeSelected.concat(objectType));
     } else {
-      const newTopics = topicsSelected.filter((item) => item !== topic);
+      const newobjectType = objectTypeSelected.filter(
+        (item) => item !== objectType
+      );
 
-      if (newTopics.length === 0) {
-        setTopicsSelected([
-          "Infrastrukur",
+      if (newobjectType.length === 0) {
+        setObjectTypeSelected([
+          "Infrastruktur",
           "Mobiliar",
           "Natur",
           "Gebäude",
@@ -107,7 +87,7 @@ const ModelsList = ({ spawnObject }) => {
           "Sport",
         ]);
       } else {
-        setTopicsSelected(...[newTopics]);
+        setObjectTypeSelected(...[newobjectType]);
       }
     }
   };
@@ -122,20 +102,26 @@ const ModelsList = ({ spawnObject }) => {
         alignItems="center"
         flexWrap="wrap"
       >
-        {tags.map(({ name, color, topic }) => (
+        {tags.map(({ objectType }) => (
           <Tag
-            color={color}
-            text={topic}
-            onClick={() => handleTopicSelector(topic)}
+            text={objectType}
+            onClick={() => handleobjectTypeelector(objectType)}
             active={
-              (topicsSelected.includes(topic) && topicsSelected.length !== 6) ||
-              (topicsSelected.length === 6 && topic === "Alle")
+              (objectTypeSelected.includes(objectType) &&
+                objectTypeSelected.length !== 6) ||
+              (objectTypeSelected.length === 6 && objectType === "Alle")
             }
           />
         ))}
       </FlexWrapper>
-
-      {/* <List CardType={ObjectCard} loading={false} data={models} /> */}
+      {models && (
+        <List
+          CardType={ObjectCard}
+          loading={false}
+          handleButtonClick={spawnObject}
+          data={models}
+        />
+      )}
     </React.Fragment>
   );
 };

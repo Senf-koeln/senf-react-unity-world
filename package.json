@@ -7,8 +7,9 @@
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
     "react-unity-webgl": "^8.8.0",
-    "senf-atomic-design-system": "^1.0.83",
+    "senf-atomic-design-system": "^1.2.6",
     "styled-components": "^5.3.5",
+    "styled-normalize": "^8.0.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

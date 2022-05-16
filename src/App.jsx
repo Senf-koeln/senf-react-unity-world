@@ -1,5 +1,5 @@
 /** @format */
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Unity, { UnityContext } from "react-unity-webgl";
 import MenuSidebar from "./components/MenuSidebar";
@@ -15,15 +15,17 @@ import {
   Auth,
 } from "senf-atomic-design-system";
 import { ThemeProvider } from "styled-components";
-import { useEffect, useState } from "react";
 import InfoModal from "./components/InfoModal";
 import ContextSidebar from "./components/ContextSidebar";
+import MapNavigation from "./components/MapNavigation";
+import DrawContext from "./components/DrawContext";
+import SaveModal from "./components/SaveModal";
 
 const unityContext = new UnityContext({
-  loaderUrl: "Build/WebGLBuild_v4.loader.js",
-  dataUrl: "Build/WebGLBuild_v4.data",
-  frameworkUrl: "Build/WebGLBuild_v4.framework.js",
-  codeUrl: "Build/WebGLBuild_v4.wasm",
+  loaderUrl: "WebGLBuild_v5/WebGLBuild_v5.loader.js",
+  dataUrl: "WebGLBuild_v5/WebGLBuild_v5.data",
+  frameworkUrl: "WebGLBuild_v5/WebGLBuild_v5.framework.js",
+  codeUrl: "WebGLBuild_v5/WebGLBuild_v5.wasm",
   webglContextAttributes: {
     preserveDrawingBuffer: true,
   },
@@ -36,20 +38,84 @@ const UnityWrapper = styled.div`
   background-color: black;
   z-index: 8;
 `;
+
+const Sidebars = styled.div`
+  position: fixed;
+  top: 0;
+  left: ${({ musicDomeDeleted, openInfoModal, openDrawContext }) =>
+    musicDomeDeleted && !openInfoModal && !openDrawContext ? "0px" : "-600px"};
+  z-index: 99;
+  transition: 0.5s;
+`;
 const App = () => {
+  const [activeView, setActiveView] = useState("SwitchToNormalView");
   const [componentsSidebarOpen, setComponentsSidebarOpen] = useState(false);
   const [objSelected, setIsObjSelected] = useState(false);
   const [openContextSidebar, setOpenContextSidebar] = useState(false);
-  const [openInfoModal, setOpenInfoModal] = useState(false);
+  const [openDrawContext, setOpenDrawContext] = useState(false);
 
+  const [openInfoModal, setOpenInfoModal] = useState(true);
+  const [openSaveModal, setOpenSaveModal] = useState(false);
+
+  const [description, setDescription] = useState("");
+
+  function restart() {
+    var answer = window.confirm(
+      "Bist du sicher, dass du neustarten möchtest? Die Änderungen gehen dabei verloren"
+    );
+    if (answer) {
+      unityContext.send("BuildingManager", "restart");
+      setIsMusicDomeDeleted(false);
+      setOpenInfoModal(true);
+
+      //some code
+    } else {
+      //some code
+    }
+  }
+
+  function startDrawingStreet() {
+    //Solang gezeichnet wird, dafür sorgen, dass die kamera perspektive nicht gewechselt werden kann
+    unityContext.send("DrawManager", "StartDrawing");
+    setActiveView("SwitchToTopView");
+    setOpenDrawContext(true);
+
+    // setTimeout(() => {
+    //   setComponentsSidebarOpen(false);
+    // }, 200);
+  }
+
+  function stopDrawingStreet() {
+    unityContext.send("DrawManager", "StopDrawing");
+    setOpenDrawContext(false);
+  }
+
+  //bool ob music dome delete me gedrückt wurde
+  const [musicDomeDeleted, setIsMusicDomeDeleted] = useState(false);
   useEffect(function () {
-    unityContext.on("isObjActive", function (isActive) {
+    unityContext.on("isMusicDomeDeleted", function (isDeleted) {
+      if (isDeleted) {
+        setIsMusicDomeDeleted(isDeleted);
+        setTimeout(() => {
+          setComponentsSidebarOpen(true);
+        }, 500);
+      }
+    });
+  }, []);
+
+  //im isObjectActive listener den String Objecttype ergänzt Werte: "Form", "Model" oder "Marker"
+  const [Object, setObject] = useState("");
+  useEffect(function () {
+    unityContext.on("isObjActive", function (isActive, objecttype) {
       setIsObjSelected(isActive);
+      setObject(objecttype);
       if (isActive) {
-        console.log("Object depending on Context Menu is Active");
         setOpenContextSidebar(true);
+
+        console.log("Object depending on Context Menu is Active " + objecttype);
       } else if (!isActive) {
         setOpenContextSidebar(false);
+
         console.log(
           "Deselection or non Context Menu dependent Object selected"
         );
@@ -57,50 +123,149 @@ const App = () => {
     });
   }, []);
 
-  function deleteObject() {
-    unityContext.send("BuildingManager", "DestroyObject");
+  function handInProposal() {
+    const element = document.createElement("a");
+    const file = new Blob(
+      ["email:\n\n" + "xxxx" + "\n\n\n" + "Beschreibung:\n\n" + description],
+      {
+        type: "text/plain",
+      }
+    );
+    element.href = URL.createObjectURL(file);
+    element.download = `senf-3d-game-img1${Date.now()}.txt`;
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+
+    setTimeout(() => {
+      unityContext.send("BuildingManager", "SwitchToTopView");
+
+      const data = unityContext.takeScreenshot("image/jpeg", 1.0);
+      if (data !== null) {
+        const src = data;
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", src, true);
+        xhr.responseType = "blob";
+        xhr.onload = downloadImageToLocal;
+        xhr.send();
+      }
+    }, 100);
+
+    setTimeout(() => {
+      unityContext.send("BuildingManager", "SwitchToNormalView");
+
+      const data1 = unityContext.takeScreenshot("image/jpeg", 1.0);
+      if (data1 !== null) {
+        const src = data1;
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", src, true);
+        xhr.responseType = "blob";
+        xhr.onload = downloadImageToLocal;
+        xhr.send();
+      }
+    }, 600);
+
+    setTimeout(() => {
+      unityContext.send("BuildingManager", "SwitchToStreetView");
+
+      const data2 = unityContext.takeScreenshot("image/jpeg", 1.0);
+      if (data2 !== null) {
+        const src = data2;
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", src, true);
+        xhr.responseType = "blob";
+        xhr.onload = downloadImageToLocal;
+        xhr.send();
+      }
+    }, 1000);
   }
 
-  function scaleObject(newValue) {
-    unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
-  }
+  function downloadImageToLocal() {
+    let dlLink = document.createElement("a");
 
-  function rotateObject(newValue) {
-    unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
-  }
-  //#endregion
+    const dataUrl = URL.createObjectURL(this.response);
+    dlLink.href = dataUrl;
 
+    const fileName = `senf-3d-game-img1${Date.now()}.${this.response.type.replace(
+      "image/",
+      ""
+    )}`;
+    dlLink.download = fileName;
+
+    document.body.insertAdjacentElement("beforeEnd", dlLink);
+    dlLink.click();
+    dlLink.remove();
+
+    // setTimeout(function () {
+    //   window.URL.revokeObjectURL(dataUrl);
+    // }, 1000);
+  }
+  const [name, setName] = useState("");
+  const handle = ({ target: { value } }) => setName(value);
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <div className="App">
+      <Sidebars
+        musicDomeDeleted={musicDomeDeleted}
+        openInfoModal={openInfoModal}
+        openDrawContext={openDrawContext}
+      >
         <MenuSidebar
           unityContext={unityContext}
+          activeView={activeView}
+          setActiveView={setActiveView}
           componentsSidebarOpen={componentsSidebarOpen}
           setComponentsSidebarOpen={setComponentsSidebarOpen}
           setOpenInfoModal={setOpenInfoModal}
+          restart={restart}
+          setOpenSaveModal={setOpenSaveModal}
         />
         <ComponentsSidebar
           unityContext={unityContext}
           componentsSidebarOpen={componentsSidebarOpen}
-          setComponentsSidebarOpen={setComponentsSidebarOpen}
-        />
-        <UnityWrapper>
-          <Unity className="unity-canvas" unityContext={unityContext} />
-        </UnityWrapper>
-
-        {openContextSidebar && (
-          <ContextSidebar
-            unityContext={unityContext}
-            openContextSidebar={openContextSidebar}
-          />
-        )}
-
-        <InfoModal
+          musicDomeDeleted={musicDomeDeleted}
           openInfoModal={openInfoModal}
-          setOpenInfoModal={setOpenInfoModal}
+          openDrawContext={openDrawContext}
+          setComponentsSidebarOpen={setComponentsSidebarOpen}
+          startDrawingStreet={startDrawingStreet}
         />
-      </div>
+      </Sidebars>
+      <UnityWrapper>
+        <Unity className="unity-canvas" unityContext={unityContext} />
+      </UnityWrapper>
+
+      <InfoModal
+        unityContext={unityContext}
+        openInfoModal={openInfoModal}
+        setOpenInfoModal={setOpenInfoModal}
+      />
+
+      {openContextSidebar && (
+        <ContextSidebar
+          unityContext={unityContext}
+          openContextSidebar={openContextSidebar}
+          setOpenContextSidebar={setOpenContextSidebar}
+        />
+      )}
+
+      {openDrawContext && (
+        <DrawContext
+          unityContext={unityContext}
+          stopDrawingStreet={stopDrawingStreet}
+        />
+      )}
+
+      {musicDomeDeleted && !openInfoModal && (
+        <MapNavigation unityContext={unityContext} />
+      )}
+
+      <SaveModal
+        unityContext={unityContext}
+        openSaveModal={openSaveModal}
+        setOpenSaveModal={setOpenSaveModal}
+        handInProposal={handInProposal}
+        setDescription={setDescription}
+        description={description}
+      />
     </ThemeProvider>
   );
 };
