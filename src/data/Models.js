@@ -1,0 +1,408 @@
+/** @format */
+import Img0 from "../assets/forms/0.png";
+import Img1 from "../assets/forms/1.png";
+import Img2 from "../assets/forms/2.png";
+import Img3 from "../assets/forms/3.png";
+
+import Img4 from "../assets/models/4.png";
+import Img5 from "../assets/models/5.png";
+import Img6 from "../assets/models/6.png";
+import Img7 from "../assets/models/7.png";
+import Img8 from "../assets/models/8.png";
+import Img9 from "../assets/models/9.png";
+import Img10 from "../assets/models/10.png";
+import Img11 from "../assets/models/11.png";
+import Img12 from "../assets/models/12.png";
+import Img13 from "../assets/models/13.png";
+import Img14 from "../assets/models/14.png";
+import Img15 from "../assets/models/15.png";
+import Img16 from "../assets/models/16.png";
+import Img17 from "../assets/models/17.png";
+import Img18 from "../assets/models/18.png";
+import Img19 from "../assets/models/19.png";
+import Img20 from "../assets/models/20.png";
+import Img21 from "../assets/models/21.png";
+import Img22 from "../assets/models/22.png";
+import Img23 from "../assets/models/23.png";
+import Img24 from "../assets/models/24.png";
+import Img25 from "../assets/models/25.png";
+import Img26 from "../assets/models/26.png";
+import Img27 from "../assets/models/7.png";
+import Img28 from "../assets/models/28.png";
+import Img29 from "../assets/models/29.png";
+import Img30 from "../assets/models/30.png";
+import Img31 from "../assets/models/31.png";
+import Img32 from "../assets/models/32.png";
+import Img33 from "../assets/models/33.png";
+import Img34 from "../assets/models/34.png";
+import Img35 from "../assets/models/35.png";
+import Img36 from "../assets/models/36.png";
+import Img37 from "../assets/models/37.png";
+import Img38 from "../assets/models/38.png";
+import Img39 from "../assets/models/39.png";
+import Img40 from "../assets/models/40.png";
+import Img41 from "../assets/models/41.png";
+import Img42 from "../assets/models/42.png";
+import Img43 from "../assets/models/43.png";
+import Img44 from "../assets/models/44.png";
+import Img45 from "../assets/models/45.png";
+import Img46 from "../assets/models/46.png";
+import Img47 from "../assets/models/47.png";
+import Img48 from "../assets/models/48.png";
+import Img49 from "../assets/models/49.png";
+import Img50 from "../assets/models/50.png";
+import Img51 from "../assets/models/51.png";
+import Img52 from "../assets/models/52.png";
+import Img53 from "../assets/models/53.png";
+import Img54 from "../assets/models/54.png";
+import Img55 from "../assets/models/55.png";
+import Img56 from "../assets/models/56.png";
+
+export const FormsData = [
+  {
+    objectId: 0,
+    title: "Würfel",
+    objectType: "Forms",
+    imgUrl: Img0,
+  },
+  {
+    objectId: 1,
+    title: "Ball",
+    objectType: "Forms",
+    imgUrl: Img1,
+  },
+  {
+    objectId: 2,
+    title: "Zylinder",
+    objectType: "Forms",
+    imgUrl: Img2,
+  },
+  {
+    objectId: 3,
+    title: "Marker",
+    objectType: "Marker",
+    imgUrl: Img3,
+  },
+];
+
+export const ModelsData = [
+  {
+    objectId: 4,
+    title: "Auditorium",
+    objectType: "Gebäude",
+    imgUrl: Img4,
+  },
+  {
+    objectId: 5,
+    title: "Bar",
+    objectType: "Gebäude",
+    imgUrl: Img5,
+  },
+  {
+    objectId: 6,
+    title: "Dach",
+    objectType: "Gebäude",
+    imgUrl: Img6,
+  },
+  {
+    objectId: 7,
+    title: "Eisstand",
+    objectType: "Gebäude",
+    imgUrl: Img7,
+  },
+  {
+    objectId: 8,
+    title: "Eiswagen",
+    objectType: "Gebäude",
+    imgUrl: Img8,
+  },
+  {
+    objectId: 9,
+    title: "Food Truck groß",
+    objectType: "Gebäude",
+    imgUrl: Img9,
+  },
+  {
+    objectId: 10,
+    title: "Food Truck klein",
+    objectType: "Gebäude",
+    imgUrl: Img10,
+  },
+  {
+    objectId: 11,
+    title: "Hütte abstakt",
+    objectType: "Gebäude",
+    imgUrl: Img11,
+  },
+  {
+    objectId: 12,
+    title: "Kaffee Haus",
+    objectType: "Gebäude",
+    imgUrl: Img12,
+  },
+  {
+    objectId: 13,
+    title: "Kaffe-Box",
+    objectType: "Gebäude",
+    imgUrl: Img13,
+  },
+  {
+    objectId: 14,
+    title: "Kiosk",
+    objectType: "Gebäude",
+    imgUrl: Img14,
+  },
+  {
+    objectId: 15,
+    title: "Pavillion",
+    objectType: "Gebäude",
+    imgUrl: Img15,
+  },
+  {
+    objectId: 16,
+    title: "Pavillion-Gerüst",
+    objectType: "Gebäude",
+    imgUrl: Img16,
+  },
+  {
+    objectId: 17,
+    title: "Überdächter Ständer",
+    objectType: "Gebäude",
+    imgUrl: Img17,
+  },
+  {
+    objectId: 18,
+    title: "Bühne",
+    objectType: "Infrastruktur",
+    imgUrl: Img18,
+  },
+  {
+    objectId: 19,
+    title: "E-Fahrradständer",
+    objectType: "Infrastruktur",
+    imgUrl: Img19,
+  },
+  {
+    objectId: 20,
+    title: "Fahrradständer groß",
+    objectType: "Infrastruktur",
+    imgUrl: Img20,
+  },
+  {
+    objectId: 21,
+    title: "Fahrradständer klein",
+    objectType: "Infrastruktur",
+    imgUrl: Img21,
+  },
+  {
+    objectId: 22,
+    title: "Parkplatz",
+    objectType: "Infrastruktur",
+    imgUrl: Img22,
+  },
+  {
+    objectId: 23,
+    title: "Parkuhr",
+    objectType: "Infrastruktur",
+    imgUrl: Img23,
+  },
+  {
+    objectId: 24,
+    title: "Springbrunnen",
+    objectType: "Infrastruktur",
+    imgUrl: Img24,
+  },
+  {
+    objectId: 25,
+    title: "Straßenlaterne",
+    objectType: "Infrastruktur",
+    imgUrl: Img25,
+  },
+  {
+    objectId: 26,
+    title: "Abstrakte Bank groß",
+    objectType: "Mobiliar",
+    imgUrl: Img26,
+  },
+
+  {
+    objectId: 27,
+    title: "Bank mit Tisch",
+    objectType: "Mobiliar",
+    imgUrl: Img27,
+  },
+  {
+    objectId: 28,
+    title: "Bücherschrank",
+    objectType: "Mobiliar",
+    imgUrl: Img28,
+  },
+  {
+    objectId: 29,
+    title: "Geschwungene Bank",
+    objectType: "Mobiliar",
+    imgUrl: Img29,
+  },
+  {
+    objectId: 30,
+    title: "Liege",
+    objectType: "Mobiliar",
+    imgUrl: Img30,
+  },
+  {
+    objectId: 31,
+    title: "Parkbank groß",
+    objectType: "Mobiliar",
+    imgUrl: Img31,
+  },
+  {
+    objectId: 32,
+    title: "Parkbank klein",
+    objectType: "Mobiliar",
+    imgUrl: Img32,
+  },
+  {
+    objectId: 33,
+    title: "Tisch mit Schirm",
+    objectType: "Mobiliar",
+    imgUrl: Img33,
+  },
+  {
+    objectId: 34,
+    title: "Tisch mit Stühlen",
+    objectType: "Mobiliar",
+    imgUrl: Img34,
+  },
+  {
+    objectId: 35,
+    title: "Baum Gelb",
+    objectType: "Natur",
+    imgUrl: Img35,
+  },
+  {
+    objectId: 36,
+    title: "Baum Grün",
+    objectType: "Natur",
+    imgUrl: Img36,
+  },
+  {
+    objectId: 37,
+    title: "Baum Rot",
+    objectType: "Natur",
+    imgUrl: Img37,
+  },
+  {
+    objectId: 38,
+    title: "Busch",
+    objectType: "Natur",
+    imgUrl: Img38,
+  },
+  {
+    objectId: 39,
+    title: "Hochbeet dreieckig",
+    objectType: "Natur",
+    imgUrl: Img39,
+  },
+  {
+    objectId: 40,
+    title: "Hochbeet quadarisch",
+    objectType: "Natur",
+    imgUrl: Img40,
+  },
+  {
+    objectId: 41,
+    title: "Hochbeet mit Sitz",
+    objectType: "Natur",
+    imgUrl: Img41,
+  },
+  {
+    objectId: 42,
+    title: "Tanne",
+    objectType: "Natur",
+    imgUrl: Img42,
+  },
+  {
+    objectId: 43,
+    title: "Baskettballkorb",
+    objectType: "Sport",
+    imgUrl: Img43,
+  },
+  {
+    objectId: 44,
+    title: "Drehscheibe",
+    objectType: "Spielen",
+    imgUrl: Img44,
+  },
+  {
+    objectId: 45,
+    title: "Kletterwand",
+    objectType: "Spielen",
+    imgUrl: Img45,
+  },
+  {
+    objectId: 46,
+    title: "Rutsche",
+    objectType: "Spielen",
+    imgUrl: Img46,
+  },
+  {
+    objectId: 47,
+    title: "Spielen",
+    objectType: "Spielen",
+    imgUrl: Img47,
+  },
+  {
+    objectId: 48,
+    title: "Spielen",
+    objectType: "Spielen",
+    imgUrl: Img48,
+  },
+  {
+    objectId: 49,
+    title: "Spielen",
+    objectType: "Spielen",
+    imgUrl: Img49,
+  },
+  {
+    objectId: 50,
+    title: "Spielen",
+    objectType: "Spielen",
+    imgUrl: Img50,
+  },
+  {
+    objectId: 51,
+    title: "Spielen",
+    objectType: "Spielen",
+    imgUrl: Img51,
+  },
+  {
+    objectId: 52,
+    title: "Spielen",
+    objectType: "Spielen",
+    imgUrl: Img52,
+  },
+  {
+    objectId: 53,
+    title: "Spielen",
+    objectType: "Spielen",
+    imgUrl: Img53,
+  },
+  {
+    objectId: 54,
+    title: "Sport",
+    objectType: "Sport",
+    imgUrl: Img54,
+  },
+  {
+    objectId: 55,
+    title: "Sport",
+    objectType: "Sport",
+    imgUrl: Img55,
+  },
+  {
+    objectId: 56,
+    title: "Sport",
+    objectType: "Sport",
+    imgUrl: Img56,
+  },
+];
