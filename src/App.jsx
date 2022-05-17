@@ -13,6 +13,7 @@ import {
   Input,
   OrganizationCard,
   Auth,
+  RoundedButton,
 } from "senf-atomic-design-system";
 import { ThemeProvider } from "styled-components";
 import InfoModal from "./components/InfoModal";
@@ -42,10 +43,43 @@ const UnityWrapper = styled.div`
 const Sidebars = styled.div`
   position: fixed;
   top: 0;
-  left: ${({ musicDomeDeleted, openInfoModal, openDrawContext }) =>
-    musicDomeDeleted && !openInfoModal && !openDrawContext ? "0px" : "-600px"};
+  left: ${({
+    musicDomeDeleted,
+    openInfoModal,
+    openDrawContext,
+    openSaveModal,
+  }) =>
+    musicDomeDeleted && !openInfoModal && !openDrawContext && !openSaveModal
+      ? "0px"
+      : "-600px"};
   z-index: 99;
   transition: 0.5s;
+`;
+
+const DeleteButtonWrapper = styled.div`
+  position: fixed;
+
+  display: ${({ musicDomeDeleted, openInfoModal }) =>
+    musicDomeDeleted || openInfoModal ? "none" : "block"};
+  top: 40px;
+  right: 35.5vw;
+  z-index: 999999;
+  transform: scale(1.4) rotate(45deg);
+
+  animation: deletebuttonAnimation 3s;
+
+  @keyframes deletebuttonAnimation {
+    0% {
+      transform: scale(0) rotate(45deg);
+    }
+    80% {
+      transform: scale(0) rotate(45deg);
+    }
+
+    100% {
+      transform: scale(1.4) rotate(45deg);
+    }
+  }
 `;
 const App = () => {
   const [activeView, setActiveView] = useState("SwitchToNormalView");
@@ -56,8 +90,10 @@ const App = () => {
 
   const [openInfoModal, setOpenInfoModal] = useState(true);
   const [openSaveModal, setOpenSaveModal] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const [description, setDescription] = useState("");
+  const [email, setEmail] = useState("");
 
   function restart() {
     var answer = window.confirm(
@@ -67,6 +103,8 @@ const App = () => {
       unityContext.send("BuildingManager", "restart");
       setIsMusicDomeDeleted(false);
       setOpenInfoModal(true);
+      setSaved(false);
+      setOpenSaveModal(false);
 
       //some code
     } else {
@@ -88,6 +126,10 @@ const App = () => {
   function stopDrawingStreet() {
     unityContext.send("DrawManager", "StopDrawing");
     setOpenDrawContext(false);
+  }
+
+  function deleteMusicDome() {
+    unityContext.send("BuildingManager", "musicDomeDeletion");
   }
 
   //bool ob music dome delete me gedrückt wurde
@@ -126,7 +168,7 @@ const App = () => {
   function handInProposal() {
     const element = document.createElement("a");
     const file = new Blob(
-      ["email:\n\n" + "xxxx" + "\n\n\n" + "Beschreibung:\n\n" + description],
+      ["email:\n\n" + email + "\n\n\n" + "Beschreibung:\n\n" + description],
       {
         type: "text/plain",
       }
@@ -177,6 +219,11 @@ const App = () => {
         xhr.send();
       }
     }, 1000);
+
+    unityContext.send("BuildingManager", "setTextInput");
+    setTimeout(() => {
+      setSaved(true);
+    }, 1000);
   }
 
   function downloadImageToLocal() {
@@ -199,8 +246,7 @@ const App = () => {
     //   window.URL.revokeObjectURL(dataUrl);
     // }, 1000);
   }
-  const [name, setName] = useState("");
-  const handle = ({ target: { value } }) => setName(value);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
@@ -208,6 +254,7 @@ const App = () => {
         musicDomeDeleted={musicDomeDeleted}
         openInfoModal={openInfoModal}
         openDrawContext={openDrawContext}
+        openSaveModal={openSaveModal}
       >
         <MenuSidebar
           unityContext={unityContext}
@@ -225,6 +272,7 @@ const App = () => {
           musicDomeDeleted={musicDomeDeleted}
           openInfoModal={openInfoModal}
           openDrawContext={openDrawContext}
+          openSaveModal={openSaveModal}
           setComponentsSidebarOpen={setComponentsSidebarOpen}
           startDrawingStreet={startDrawingStreet}
         />
@@ -264,8 +312,24 @@ const App = () => {
         setOpenSaveModal={setOpenSaveModal}
         handInProposal={handInProposal}
         setDescription={setDescription}
-        description={description}
+        setEmail={setEmail}
+        setOpenContextSidebar={setOpenContextSidebar}
+        saved={saved}
+        restart={restart}
       />
+
+      <DeleteButtonWrapper
+        musicDomeDeleted={musicDomeDeleted}
+        openInfoModal={openInfoModal}
+      >
+        <RoundedButton
+          color={"rgb(226,183,54)"}
+          icon="plus"
+          onClick={deleteMusicDome}
+          size="big"
+          variant={!componentsSidebarOpen ? "primary" : undefined}
+        />
+      </DeleteButtonWrapper>
     </ThemeProvider>
   );
 };

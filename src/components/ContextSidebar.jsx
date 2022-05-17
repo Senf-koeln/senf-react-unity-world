@@ -16,11 +16,11 @@ import {
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  height: 360px;
-  width: 220px;
+  height: 335px;
+  width: 180px;
   border-radius: 18px;
   margin: 10px;
-  padding: 20px;
+  padding: 10px;
   position: fixed;
   right: 0;
   top: 0;
@@ -99,6 +99,7 @@ const ContextSidebar = ({
 
   function deselect() {
     unityContext.send("BuildingManager", "Deselect");
+    setOpenContextSidebar(false);
   }
 
   return (
@@ -176,11 +177,11 @@ const ContextSidebar = ({
           />
         ))}
       </FlexWrapper> */}
-      <Divider margin="20px 0px" />
+      <Divider margin="20px 0px 10px 0px" />
       <FlexWrapper
         gap="10px"
-        width="calc(100% - 20px)"
-        margin="10px"
+        width="calc(100% - 0px)"
+        margin="0px"
         justifyContent="center"
         alignItems="center"
         flexWrap="wrap"
