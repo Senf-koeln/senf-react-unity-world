@@ -10,7 +10,7 @@ import {
   LayerGreyDefault,
 } from "senf-atomic-design-system";
 import styled from "styled-components";
-
+import CelebrateImg from "../assets/celebrateImage.png";
 const Card = styled.div`
   ${(props) => LayerGreyDefault};
   height: 160px;
@@ -29,10 +29,15 @@ const SaveModal = ({
   setOpenSaveModal,
   handInProposal,
   setDescription,
+  setEmail,
+  setOpenContextSidebar,
+  saved,
+  restart,
 }) => {
   useEffect(() => {
     if (openSaveModal) {
       unityContext.send("BuildingManager", "setTextInput");
+      setOpenContextSidebar(false);
     }
   }, [openSaveModal]);
 
@@ -43,45 +48,108 @@ const SaveModal = ({
       zIndex={9999999}
       size="m"
     >
-      <FlexWrapper
-        justifyContent="center"
-        margin="40px 40px 0px 40px"
-        width="calc(100%  - 80px)"
-        height="calc(100% - 80px)"
-      >
-        <Typography variant="h2" style={{ textAlign: "center" }}>
-          Zukunft gestalten. Räume neu erschaffen.
-        </Typography>
-      </FlexWrapper>
+      {!saved ? (
+        <React.Fragment>
+          <FlexWrapper
+            justifyContent="center"
+            margin="40px 40px 0px 40px"
+            width="calc(100%  - 80px)"
+            height="calc(100% - 80px)"
+          >
+            <Typography variant="h2" style={{ textAlign: "center" }}>
+              Erzähle uns mehr zu deinem Entwurf...
+            </Typography>
+          </FlexWrapper>
 
-      <div style={{ margin: "20px", width: "calc(100% - 40px)" }}>
-        <form></form>
+          <div style={{ margin: "20px", width: "calc(100% - 40px)" }}>
+            <form></form>
 
-        <Input
-          label="Beschreibung hinzufügen"
-          note="a note for extra info"
-          placeholder="Schreibe ein paar Sätze zu deinem Vorschlag..."
-          type="textarea"
-          columns={28}
-          rows={12}
-          id="myInput"
-          receiveValue={(inputValue) => setDescription(inputValue)}
+            <Input
+              placeholder="Beschreibung hinzufügen..."
+              type="textarea"
+              columns={28}
+              rows={12}
+              id="myInput"
+              receiveValue={(inputValue) => setDescription(inputValue)}
 
-          // onChange={(event) => setDescription(event.target.value)}
-        />
-      </div>
-      <FlexWrapper
-        justifyContent="center"
-        margin="10px"
-        width="calc(100% - 20px)"
-      >
-        <Button
-          variant="primary"
-          text="Speichern"
-          onClick={handInProposal}
-          loading={false}
-        />
-      </FlexWrapper>
+              // onChange={(event) => setDescription(event.target.value)}
+            />
+            <br />
+            <Input
+              label="Kontakt"
+              placeholder="max@mail.de"
+              type="email"
+              columns={28}
+              rows={12}
+              receiveValue={(inputValue) => setEmail(inputValue)}
+
+              // onChange={(event) => setDescription(event.target.value)}
+            />
+          </div>
+          <FlexWrapper
+            justifyContent="center"
+            margin="10px"
+            width="calc(100% - 20px)"
+          >
+            <Button
+              variant="primary"
+              text="Speichern"
+              onClick={handInProposal}
+              loading={false}
+            />
+          </FlexWrapper>
+          <div
+            style={{
+              height: "100%",
+              width: "100%",
+              position: "absolute",
+              top: 0,
+              backgroundColor: "#f1ecdc",
+              zIndex: -1,
+            }}
+          />
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <FlexWrapper
+            justifyContent="center"
+            margin="40px 40px 0px 40px"
+            width="calc(100%  - 80px)"
+            height="calc(100% - 80px)"
+          >
+            <Typography variant="h2" style={{ textAlign: "center" }}>
+              Danke für deinen Entwurf!
+            </Typography>
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="40px 40px 0px 40px"
+            width="calc(100%  - 80px)"
+            height="calc(100% - 80px)"
+          >
+            <img src={CelebrateImg} width="300px" />
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="10px"
+            width="calc(100% - 20px)"
+            gap="10px"
+          >
+            <Button
+              variant="primary"
+              text="Zurück zum Entwurf"
+              onClick={() => setOpenSaveModal(false)}
+              loading={false}
+            />
+            <Button
+              variant="primary"
+              text="Neustarten"
+              onClick={restart}
+              loading={false}
+            />
+          </FlexWrapper>
+        </React.Fragment>
+      )}
     </Modal>
   );
 };

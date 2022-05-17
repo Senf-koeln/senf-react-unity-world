@@ -37,6 +37,8 @@ const InfoModal = ({ unityContext, openInfoModal, setOpenInfoModal }) => {
 
   function startgame() {
     unityContext.send("BuildingManager", "startGame");
+    unityContext.send("BuildingManager", "setTextInput");
+
     setOpenInfoModal(false);
   }
   return (

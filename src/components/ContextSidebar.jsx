@@ -16,11 +16,11 @@ import {
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  height: 360px;
-  width: 220px;
+  height: 335px;
+  width: 200px;
   border-radius: 18px;
   margin: 10px;
-  padding: 20px;
+  padding: 10px;
   position: fixed;
   right: 0;
   top: 0;
@@ -54,41 +54,25 @@ const ContextSidebar = ({
 
   const setScale = (value) => {
     if (value === "up") {
-      const newValue = scaleRangeValue;
-      setScaleRangeValue(newValue + 0.5);
-      unityContext.send(
-        "BuildingManager",
-        "ScaleSliderUpdate",
-        scaleRangeValue
-      );
+      const newValue = scaleRangeValue + 0.5;
+      setScaleRangeValue(newValue);
+      unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
     } else if (value === "down") {
-      const newValue = scaleRangeValue;
-      setScaleRangeValue(newValue - 0.5);
-      unityContext.send(
-        "BuildingManager",
-        "ScaleSliderUpdate",
-        scaleRangeValue
-      );
+      const newValue = scaleRangeValue - 0.5;
+      setScaleRangeValue(newValue);
+      unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
     }
   };
 
   const setRotate = (value) => {
     if (value === "up") {
-      const newValue = rotateRangeValue;
-      setRotateRangeValue(newValue - 5);
-      unityContext.send(
-        "BuildingManager",
-        "RotateSliderUpdate",
-        rotateRangeValue
-      );
+      const newValue = rotateRangeValue - 5;
+      setRotateRangeValue(newValue);
+      unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
     } else if (value === "down") {
-      const newValue = rotateRangeValue;
-      setRotateRangeValue(newValue + 5);
-      unityContext.send(
-        "BuildingManager",
-        "RotateSliderUpdate",
-        rotateRangeValue
-      );
+      const newValue = rotateRangeValue + 5;
+      setRotateRangeValue(newValue);
+      unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
     }
   };
 
@@ -99,6 +83,7 @@ const ContextSidebar = ({
 
   function deselect() {
     unityContext.send("BuildingManager", "Deselect");
+    setOpenContextSidebar(false);
   }
 
   return (
@@ -176,11 +161,11 @@ const ContextSidebar = ({
           />
         ))}
       </FlexWrapper> */}
-      <Divider margin="20px 0px" />
+      <Divider margin="20px 0px 10px 0px" />
       <FlexWrapper
         gap="10px"
-        width="calc(100% - 20px)"
-        margin="10px"
+        width="calc(100% - 0px)"
+        margin="0px"
         justifyContent="center"
         alignItems="center"
         flexWrap="wrap"

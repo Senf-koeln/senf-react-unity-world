@@ -31,11 +31,13 @@ const Wrapper = styled.div`
     musicDomeDeleted,
     openInfoModal,
     openDrawContext,
+    openSaveModal,
   }) =>
     componentsSidebarOpen &&
     musicDomeDeleted &&
     !openInfoModal &&
-    !openDrawContext
+    !openDrawContext &&
+    !openSaveModal
       ? "200px"
       : "-600px"};
   transition: 0.5s;
@@ -65,6 +67,7 @@ const ComponentsSidebar = ({
   musicDomeDeleted,
   openInfoModal,
   openDrawContext,
+  openSaveModal,
 }) => {
   const [order, setOrder] = useState(1);
 
@@ -83,6 +86,7 @@ const ComponentsSidebar = ({
       musicDomeDeleted={musicDomeDeleted}
       openInfoModal={openInfoModal}
       openDrawContext={openDrawContext}
+      openSaveModal={openSaveModal}
     >
       <FlexWrapper width="calc(100% - 40px)" margin="20px">
         <FlexWrapper flexDirection="column" alignItems="center">
