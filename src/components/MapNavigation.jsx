@@ -17,7 +17,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   height: 125px;
-  width: 65px;
+  width: 180px;
   border-radius: 18px;
   margin: 10px;
   position: fixed;
@@ -25,10 +25,10 @@ const Wrapper = styled.div`
   bottom: 0;
   z-index: 99999;
   right: ${({ openContextSidebar }) => (openContextSidebar ? "0px" : "-200px")};
-  background-color: #f8f8f8;
-  display: flex;
 
-  ${(props) => LayerWhiteFirstDefault}
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const MapNavigation = ({ unityContext }) => {
@@ -46,12 +46,26 @@ const MapNavigation = ({ unityContext }) => {
     unityContext.send("BuildingManager", "zoom", newZoomvalue);
   }
 
+  function rotateLeft() {
+    unityContext.send("BuildingManager", "rotateLeft", 10);
+  }
+
+  function rotateRight() {
+    unityContext.send("BuildingManager", "rotateRight", 10);
+  }
+
   return (
     <Wrapper openContextSidebar>
+      <Button
+        variant="primary"
+        icon="arrow"
+        transform="rotate(90deg)"
+        onClick={rotateLeft}
+      />
       <FlexWrapper
         gap="10px"
-        width="calc(100% - 20px)"
-        margin="5px 10px 10px 10px"
+        width="50px"
+        margin="5px"
         justifyContent="center"
         alignItems="center"
         flexWrap="wrap"
@@ -98,6 +112,12 @@ const MapNavigation = ({ unityContext }) => {
           </svg>
         </Button>
       </FlexWrapper>
+      <Button
+        variant="primary"
+        icon="arrow"
+        transform="rotate(270deg)"
+        onClick={rotateRight}
+      />
     </Wrapper>
   );
 };

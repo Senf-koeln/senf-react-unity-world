@@ -17,7 +17,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   height: 335px;
-  width: 180px;
+  width: 200px;
   border-radius: 18px;
   margin: 10px;
   padding: 10px;
@@ -54,41 +54,25 @@ const ContextSidebar = ({
 
   const setScale = (value) => {
     if (value === "up") {
-      const newValue = scaleRangeValue;
-      setScaleRangeValue(newValue + 0.5);
-      unityContext.send(
-        "BuildingManager",
-        "ScaleSliderUpdate",
-        scaleRangeValue
-      );
+      const newValue = scaleRangeValue + 0.5;
+      setScaleRangeValue(newValue);
+      unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
     } else if (value === "down") {
-      const newValue = scaleRangeValue;
-      setScaleRangeValue(newValue - 0.5);
-      unityContext.send(
-        "BuildingManager",
-        "ScaleSliderUpdate",
-        scaleRangeValue
-      );
+      const newValue = scaleRangeValue - 0.5;
+      setScaleRangeValue(newValue);
+      unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
     }
   };
 
   const setRotate = (value) => {
     if (value === "up") {
-      const newValue = rotateRangeValue;
-      setRotateRangeValue(newValue - 5);
-      unityContext.send(
-        "BuildingManager",
-        "RotateSliderUpdate",
-        rotateRangeValue
-      );
+      const newValue = rotateRangeValue - 5;
+      setRotateRangeValue(newValue);
+      unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
     } else if (value === "down") {
-      const newValue = rotateRangeValue;
-      setRotateRangeValue(newValue + 5);
-      unityContext.send(
-        "BuildingManager",
-        "RotateSliderUpdate",
-        rotateRangeValue
-      );
+      const newValue = rotateRangeValue + 5;
+      setRotateRangeValue(newValue);
+      unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
     }
   };
 

@@ -17,7 +17,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   height: 70px;
-  width: 420px;
+  width: 500px;
   border-radius: 18px;
   margin: 10px;
   position: fixed;
@@ -32,6 +32,10 @@ const Wrapper = styled.div`
 `;
 
 const DrawContext = ({ unityContext, stopDrawingStreet }) => {
+  function deleteCurrentLine() {
+    unityContext.send("DrawManager", "deleteCurrentLine");
+  }
+
   return (
     <Wrapper openContextSidebar>
       <FlexWrapper
@@ -42,13 +46,25 @@ const DrawContext = ({ unityContext, stopDrawingStreet }) => {
         height="calc(100% - 20px)"
       >
         <Typography variant="h3">Weg einzeichnen</Typography>
-
-        <Button
-          variant="primary"
-          fillWidth={true}
-          text="Fertig"
-          onClick={stopDrawingStreet}
-        />
+        <FlexWrapper
+          justifyContent="space-between"
+          alignItems="center"
+          gap="10px"
+          width="200px"
+        >
+          <Button
+            variant="secondary"
+            fillWidth={true}
+            text="Rückgängig"
+            onClick={deleteCurrentLine}
+          />
+          <Button
+            variant="primary"
+            fillWidth={true}
+            text="Fertig"
+            onClick={stopDrawingStreet}
+          />
+        </FlexWrapper>{" "}
       </FlexWrapper>
     </Wrapper>
   );

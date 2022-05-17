@@ -41,6 +41,9 @@ const ModelsList = ({ spawnObject }) => {
       const NewModels = ModelsData.filter(({ objectType }) =>
         objectTypeSelected.includes(objectType)
       );
+
+      NewModels.sort((a, b) => parseFloat(a.index) - parseFloat(b.index));
+
       console.log(NewModels);
 
       if (NewModels) {
