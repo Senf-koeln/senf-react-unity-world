@@ -47,6 +47,7 @@ const InfoModal = ({ unityContext, openInfoModal, setOpenInfoModal }) => {
       setOpenModal={isLoaded ? startgame : null}
       zIndex={9999999}
       size="m"
+      overflow="hidden"
     >
       {/* <SubNavbar iconRight="plus" iconRightTransform="rotate(45deg)" /> */}
       <FlexWrapper
