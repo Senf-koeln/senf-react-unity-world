@@ -62,7 +62,7 @@ const DeleteButtonWrapper = styled.div`
   display: ${({ musicDomeDeleted, openInfoModal }) =>
     musicDomeDeleted || openInfoModal ? "none" : "block"};
   top: 40px;
-  right: 35.5vw;
+  left: calc(50vw + 177px);
   z-index: 999999;
   transform: scale(1.4) rotate(45deg);
 

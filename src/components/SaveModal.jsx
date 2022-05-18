@@ -47,6 +47,8 @@ const SaveModal = ({
       setOpenModal={() => setOpenSaveModal(false)}
       zIndex={9999999}
       size="m"
+      overflow="hidden"
+      backgroundColor="#f1ecdc"
     >
       {!saved ? (
         <React.Fragment>
@@ -98,16 +100,6 @@ const SaveModal = ({
               loading={false}
             />
           </FlexWrapper>
-          <div
-            style={{
-              height: "100%",
-              width: "100%",
-              position: "absolute",
-              top: 0,
-              backgroundColor: "#f1ecdc",
-              zIndex: -1,
-            }}
-          />
         </React.Fragment>
       ) : (
         <React.Fragment>
