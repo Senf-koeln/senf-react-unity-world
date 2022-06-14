@@ -23,10 +23,10 @@ import DrawContext from "./components/DrawContext";
 import SaveModal from "./components/SaveModal";
 
 const unityContext = new UnityContext({
-  loaderUrl: "WebGLBuild_v5/WebGLBuild_v5.loader.js",
-  dataUrl: "WebGLBuild_v5/WebGLBuild_v5.data",
-  frameworkUrl: "WebGLBuild_v5/WebGLBuild_v5.framework.js",
-  codeUrl: "WebGLBuild_v5/WebGLBuild_v5.wasm",
+  loaderUrl: "WebGLBuild_v5/touch_build.loader.js",
+  dataUrl: "WebGLBuild_v5/touch_build.data",
+  frameworkUrl: "WebGLBuild_v5/touch_build.framework.js",
+  codeUrl: "WebGLBuild_v5/touch_build.wasm",
   webglContextAttributes: {
     preserveDrawingBuffer: true,
   },
@@ -251,7 +251,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Sidebars
-        musicDomeDeleted={musicDomeDeleted}
+        musicDomeDeleted={true}
         openInfoModal={openInfoModal}
         openDrawContext={openDrawContext}
         openSaveModal={openSaveModal}
@@ -269,7 +269,7 @@ const App = () => {
         <ComponentsSidebar
           unityContext={unityContext}
           componentsSidebarOpen={componentsSidebarOpen}
-          musicDomeDeleted={musicDomeDeleted}
+          musicDomeDeleted={true}
           openInfoModal={openInfoModal}
           openDrawContext={openDrawContext}
           openSaveModal={openSaveModal}
@@ -302,9 +302,7 @@ const App = () => {
         />
       )}
 
-      {musicDomeDeleted && !openInfoModal && (
-        <MapNavigation unityContext={unityContext} />
-      )}
+      {!openInfoModal && <MapNavigation unityContext={unityContext} />}
 
       <SaveModal
         unityContext={unityContext}
@@ -317,19 +315,6 @@ const App = () => {
         saved={saved}
         restart={restart}
       />
-
-      <DeleteButtonWrapper
-        musicDomeDeleted={musicDomeDeleted}
-        openInfoModal={openInfoModal}
-      >
-        <RoundedButton
-          color={"rgb(226,183,54)"}
-          icon="plus"
-          onClick={deleteMusicDome}
-          size="big"
-          variant={!componentsSidebarOpen ? "primary" : undefined}
-        />
-      </DeleteButtonWrapper>
     </ThemeProvider>
   );
 };
