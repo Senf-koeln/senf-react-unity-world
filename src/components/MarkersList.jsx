@@ -14,9 +14,11 @@ import {
 } from "senf-atomic-design-system";
 
 import Weg from "../assets/surfaces/weg.png";
-import Weg_pedestrian from "../assets/surfaces/Weg_pedestrian.png";
+import Weg_pedestrian from "../assets/surfaces/Weg_Pedestrian.png";
 import Weg_Bike from "../assets/surfaces/Weg_Bike.png";
 import Weg_Car from "../assets/surfaces/Weg_Car.png";
+import Zebrastreifen from "../assets/surfaces/Zebrastreifen.png";
+
 import Img57 from "../assets/surfaces/57.png";
 
 const MarkersList = ({
@@ -74,7 +76,7 @@ const MarkersList = ({
           objectId: 61,
           title: "Zebrastreifen",
           objectType: "surface",
-          imgUrl: Weg,
+          imgUrl: Zebrastreifen,
         }}
       />
 
