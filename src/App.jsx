@@ -23,10 +23,10 @@ import DrawContext from "./components/DrawContext";
 import SaveModal from "./components/SaveModal";
 
 const unityContext = new UnityContext({
-  loaderUrl: "WebGLBuild_v5/touch_build.loader.js",
-  dataUrl: "WebGLBuild_v5/touch_build.data",
-  frameworkUrl: "WebGLBuild_v5/touch_build.framework.js",
-  codeUrl: "WebGLBuild_v5/touch_build.wasm",
+  loaderUrl: "WebGLBuild_v5/WebGLBuild_v5.loader.js",
+  dataUrl: "WebGLBuild_v5/WebGLBuild_v5.data",
+  frameworkUrl: "WebGLBuild_v5/WebGLBuild_v5.framework.js",
+  codeUrl: "WebGLBuild_v5/WebGLBuild_v5.wasm",
   webglContextAttributes: {
     preserveDrawingBuffer: true,
   },
@@ -112,9 +112,10 @@ const App = () => {
     }
   }
 
-  function startDrawingStreet() {
+  function startDrawingStreet(index) {
     //Solang gezeichnet wird, dafür sorgen, dass die kamera perspektive nicht gewechselt werden kann
-    unityContext.send("DrawManager", "StartDrawing");
+    unityContext.send("DrawManager", "StartDrawing", index);
+
     setActiveView("SwitchToTopView");
     setOpenDrawContext(true);
 
@@ -146,11 +147,11 @@ const App = () => {
   }, []);
 
   //im isObjectActive listener den String Objecttype ergänzt Werte: "Form", "Model" oder "Marker"
-  const [Object, setObject] = useState("");
+  const [objectType, setObjectType] = useState("");
   useEffect(function () {
     unityContext.on("isObjActive", function (isActive, objecttype) {
       setIsObjSelected(isActive);
-      setObject(objecttype);
+      setObjectType(objecttype);
       if (isActive) {
         setOpenContextSidebar(true);
 
@@ -290,6 +291,7 @@ const App = () => {
       {openContextSidebar && (
         <ContextSidebar
           unityContext={unityContext}
+          objectType={objectType}
           openContextSidebar={openContextSidebar}
           setOpenContextSidebar={setOpenContextSidebar}
         />

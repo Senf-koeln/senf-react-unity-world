@@ -16,7 +16,7 @@ import {
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  height: 335px;
+  height: ${({ objectType }) => (objectType ? "455px" : "335px")};
   width: 200px;
   border-radius: 18px;
   margin: 10px;
@@ -39,6 +39,7 @@ const tags = [
 
 const ContextSidebar = ({
   unityContext,
+  objectType,
   openContextSidebar,
   setOpenContextSidebar,
 }) => {
@@ -76,6 +77,14 @@ const ContextSidebar = ({
     }
   };
 
+  function scaleStreetWidth(value) {
+    unityContext.send("BuildingManager", "ScaleStreetWidth", value);
+  }
+
+  function scaleStreetLength(value) {
+    unityContext.send("BuildingManager", "ScaleStreetLength", value);
+  }
+
   function deleteObject() {
     unityContext.send("BuildingManager", "DestroyObject");
     setOpenContextSidebar(false);
@@ -87,27 +96,86 @@ const ContextSidebar = ({
   }
 
   return (
-    <Wrapper openContextSidebar>
-      <FlexWrapper
-        justifyContent="center"
-        margin="20px"
-        width="calc(100% - 40px)"
-      >
-        <Typography variant="h3">Größe </Typography>
-      </FlexWrapper>
-      <FlexWrapper
-        justifyContent="center"
-        margin="20px"
-        width="calc(100% - 40px)"
-        gap="10px"
-      >
-        <Button
-          variant="primary"
-          icon="minus"
-          onClick={() => setScale("down")}
-        />
-        <Button variant="primary" icon="plus" onClick={() => setScale("up")} />
-      </FlexWrapper>
+    <Wrapper openContextSidebar objectType={objectType}>
+      {objectType === "Street" ? (
+        <React.Fragment>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+          >
+            <Typography variant="h3">Länge ändern </Typography>
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+            gap="10px"
+          >
+            <Button
+              variant="primary"
+              icon="minus"
+              onClick={() => setScale("down")}
+            />
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => setScale("up")}
+            />
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+          >
+            <Typography variant="h3">Breite ändern </Typography>
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+            gap="10px"
+          >
+            <Button
+              variant="primary"
+              icon="minus"
+              onClick={() => setScale("down")}
+            />
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => setScale("up")}
+            />
+          </FlexWrapper>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+          >
+            <Typography variant="h3">Größe </Typography>
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+            gap="10px"
+          >
+            <Button
+              variant="primary"
+              icon="minus"
+              onClick={() => setScale("down")}
+            />
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => setScale("up")}
+            />
+          </FlexWrapper>
+        </React.Fragment>
+      )}
 
       <FlexWrapper
         justifyContent="center"
@@ -116,7 +184,6 @@ const ContextSidebar = ({
       >
         <Typography variant="h3">Drehen </Typography>
       </FlexWrapper>
-
       <FlexWrapper
         justifyContent="center"
         gap="10px"
@@ -136,7 +203,6 @@ const ContextSidebar = ({
           onClick={() => setRotate("up")}
         />
       </FlexWrapper>
-
       {/* <FlexWrapper
         justifyContent="center"
         margin="20px"
