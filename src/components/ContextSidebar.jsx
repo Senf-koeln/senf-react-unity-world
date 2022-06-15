@@ -78,11 +78,27 @@ const ContextSidebar = ({
   };
 
   function scaleStreetWidth(value) {
-    unityContext.send("BuildingManager", "ScaleStreetWidth", value);
+    if (value === "up") {
+      const newValue = rotateRangeValue - 1;
+      setRotateRangeValue(newValue);
+      unityContext.send("BuildingManager", "ScaleStreetWidth", newValue);
+    } else if (value === "down") {
+      const newValue = rotateRangeValue + 1;
+      setRotateRangeValue(newValue);
+      unityContext.send("BuildingManager", "ScaleStreetWidth", newValue);
+    }
   }
 
   function scaleStreetLength(value) {
-    unityContext.send("BuildingManager", "ScaleStreetLength", value);
+    if (value === "up") {
+      const newValue = rotateRangeValue - 1;
+      setRotateRangeValue(newValue);
+      unityContext.send("BuildingManager", "ScaleStreetLength", newValue);
+    } else if (value === "down") {
+      const newValue = rotateRangeValue + 1;
+      setRotateRangeValue(newValue);
+      unityContext.send("BuildingManager", "ScaleStreetLength", newValue);
+    }
   }
 
   function deleteObject() {
@@ -115,12 +131,12 @@ const ContextSidebar = ({
             <Button
               variant="primary"
               icon="minus"
-              onClick={() => setScale("down")}
+              onClick={() => scaleStreetLength("down")}
             />
             <Button
               variant="primary"
               icon="plus"
-              onClick={() => setScale("up")}
+              onClick={() => scaleStreetLength("up")}
             />
           </FlexWrapper>
           <FlexWrapper
@@ -139,12 +155,12 @@ const ContextSidebar = ({
             <Button
               variant="primary"
               icon="minus"
-              onClick={() => setScale("down")}
+              onClick={() => scaleStreetWidth("down")}
             />
             <Button
               variant="primary"
               icon="plus"
-              onClick={() => setScale("up")}
+              onClick={() => scaleStreetWidth("up")}
             />
           </FlexWrapper>
         </React.Fragment>
