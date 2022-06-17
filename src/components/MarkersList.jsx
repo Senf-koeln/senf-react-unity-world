@@ -31,10 +31,10 @@ const MarkersList = ({
     <React.Fragment>
       <ObjectCard
         loading={false}
-        handleButtonClick={() => spawnObject(57)}
+        handleButtonClick={() => startDrawingStreet()}
         data={{
           objectId: 57,
-          title: "Gras",
+          title: "Rasen",
           objectType: "surface",
           imgUrl: Img57,
         }}

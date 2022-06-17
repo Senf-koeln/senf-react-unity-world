@@ -16,7 +16,7 @@ import {
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  height: ${({ objectType }) => (objectType ? "455px" : "335px")};
+  height: ${({ objectType }) => (objectType === "Street" ? "455px" : "335px")};
   width: 200px;
   border-radius: 18px;
   margin: 10px;
@@ -55,49 +55,33 @@ const ContextSidebar = ({
 
   const setScale = (value) => {
     if (value === "up") {
-      const newValue = scaleRangeValue + 0.5;
-      setScaleRangeValue(newValue);
-      unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
+      unityContext.send("BuildingManager", "ScaleSliderUpdate", +0.5);
     } else if (value === "down") {
-      const newValue = scaleRangeValue - 0.5;
-      setScaleRangeValue(newValue);
-      unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
+      unityContext.send("BuildingManager", "ScaleSliderUpdate", -0.5);
     }
   };
 
   const setRotate = (value) => {
     if (value === "up") {
-      const newValue = rotateRangeValue - 5;
-      setRotateRangeValue(newValue);
-      unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
+      unityContext.send("BuildingManager", "RotateSliderUpdate", 1);
     } else if (value === "down") {
-      const newValue = rotateRangeValue + 5;
-      setRotateRangeValue(newValue);
-      unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
+      unityContext.send("BuildingManager", "RotateSliderUpdate", -1);
     }
   };
 
   function scaleStreetWidth(value) {
     if (value === "up") {
-      const newValue = rotateRangeValue - 1;
-      setRotateRangeValue(newValue);
-      unityContext.send("BuildingManager", "ScaleStreetWidth", newValue);
+      unityContext.send("BuildingManager", "ScaleStreetWidth", 0.1);
     } else if (value === "down") {
-      const newValue = rotateRangeValue + 1;
-      setRotateRangeValue(newValue);
-      unityContext.send("BuildingManager", "ScaleStreetWidth", newValue);
+      unityContext.send("BuildingManager", "ScaleStreetWidth", -0.1);
     }
   }
 
   function scaleStreetLength(value) {
     if (value === "up") {
-      const newValue = rotateRangeValue - 1;
-      setRotateRangeValue(newValue);
-      unityContext.send("BuildingManager", "ScaleStreetLength", newValue);
+      unityContext.send("BuildingManager", "ScaleStreetLength", -1);
     } else if (value === "down") {
-      const newValue = rotateRangeValue + 1;
-      setRotateRangeValue(newValue);
-      unityContext.send("BuildingManager", "ScaleStreetLength", newValue);
+      unityContext.send("BuildingManager", "ScaleStreetLength", +1);
     }
   }
 

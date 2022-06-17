@@ -29,7 +29,7 @@ const SaveModal = ({
   setOpenSaveModal,
   handInProposal,
   setDescription,
-  setEmail,
+  setName,
   setOpenContextSidebar,
   saved,
   restart,
@@ -78,12 +78,10 @@ const SaveModal = ({
             />
             <br />
             <Input
-              label="Kontakt"
-              placeholder="max@mail.de"
-              type="email"
-              columns={28}
-              rows={12}
-              receiveValue={(inputValue) => setEmail(inputValue)}
+              label="Name"
+              placeholder="Max Mustermann"
+              type="text"
+              receiveValue={(inputValue) => setName(inputValue)}
 
               // onChange={(event) => setDescription(event.target.value)}
             />

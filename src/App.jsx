@@ -93,7 +93,7 @@ const App = () => {
   const [saved, setSaved] = useState(false);
 
   const [description, setDescription] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
 
   function restart() {
     var answer = window.confirm(
@@ -101,7 +101,6 @@ const App = () => {
     );
     if (answer) {
       unityContext.send("BuildingManager", "restart");
-      setIsMusicDomeDeleted(false);
       setOpenInfoModal(true);
       setSaved(false);
       setOpenSaveModal(false);
@@ -114,37 +113,18 @@ const App = () => {
 
   function startDrawingStreet(index) {
     //Solang gezeichnet wird, dafür sorgen, dass die kamera perspektive nicht gewechselt werden kann
-    unityContext.send("DrawManager", "StartDrawing", index);
+
+    unityContext.send("DrawManager", "StartBrush");
+    unityContext.send("BuildingManager", "SwitchToTopView");
 
     setActiveView("SwitchToTopView");
     setOpenDrawContext(true);
-
-    // setTimeout(() => {
-    //   setComponentsSidebarOpen(false);
-    // }, 200);
   }
 
   function stopDrawingStreet() {
-    unityContext.send("DrawManager", "StopDrawing");
+    unityContext.send("DrawManager", "StopBrush");
     setOpenDrawContext(false);
   }
-
-  function deleteMusicDome() {
-    unityContext.send("BuildingManager", "musicDomeDeletion");
-  }
-
-  //bool ob music dome delete me gedrückt wurde
-  const [musicDomeDeleted, setIsMusicDomeDeleted] = useState(false);
-  useEffect(function () {
-    unityContext.on("isMusicDomeDeleted", function (isDeleted) {
-      if (isDeleted) {
-        setIsMusicDomeDeleted(isDeleted);
-        setTimeout(() => {
-          setComponentsSidebarOpen(true);
-        }, 500);
-      }
-    });
-  }, []);
 
   //im isObjectActive listener den String Objecttype ergänzt Werte: "Form", "Model" oder "Marker"
   const [objectType, setObjectType] = useState("");
@@ -169,7 +149,7 @@ const App = () => {
   function handInProposal() {
     const element = document.createElement("a");
     const file = new Blob(
-      ["email:\n\n" + email + "\n\n\n" + "Beschreibung:\n\n" + description],
+      ["name:\n\n" + name + "\n\n\n" + "Beschreibung:\n\n" + description],
       {
         type: "text/plain",
       }
@@ -180,7 +160,7 @@ const App = () => {
     element.click();
 
     setTimeout(() => {
-      unityContext.send("BuildingManager", "SwitchToTopView");
+      unityContext.send("BuildingManager", "FinishToTopView");
 
       const data = unityContext.takeScreenshot("image/jpeg", 1.0);
       if (data !== null) {
@@ -194,7 +174,7 @@ const App = () => {
     }, 100);
 
     setTimeout(() => {
-      unityContext.send("BuildingManager", "SwitchToNormalView");
+      unityContext.send("BuildingManager", "FinishNormalView");
 
       const data1 = unityContext.takeScreenshot("image/jpeg", 1.0);
       if (data1 !== null) {
@@ -208,7 +188,7 @@ const App = () => {
     }, 600);
 
     setTimeout(() => {
-      unityContext.send("BuildingManager", "SwitchToStreetView");
+      unityContext.send("BuildingManager", "FinishToStreetView");
 
       const data2 = unityContext.takeScreenshot("image/jpeg", 1.0);
       if (data2 !== null) {
@@ -219,12 +199,12 @@ const App = () => {
         xhr.onload = downloadImageToLocal;
         xhr.send();
       }
-    }, 1000);
+    }, 1200);
 
     unityContext.send("BuildingManager", "setTextInput");
     setTimeout(() => {
       setSaved(true);
-    }, 1000);
+    }, 2000);
   }
 
   function downloadImageToLocal() {
@@ -304,7 +284,9 @@ const App = () => {
         />
       )}
 
-      {!openInfoModal && <MapNavigation unityContext={unityContext} />}
+      {!openInfoModal && (
+        <MapNavigation unityContext={unityContext} activeView={activeView} />
+      )}
 
       <SaveModal
         unityContext={unityContext}
@@ -312,7 +294,7 @@ const App = () => {
         setOpenSaveModal={setOpenSaveModal}
         handInProposal={handInProposal}
         setDescription={setDescription}
-        setEmail={setEmail}
+        setName={setName}
         setOpenContextSidebar={setOpenContextSidebar}
         saved={saved}
         restart={restart}
