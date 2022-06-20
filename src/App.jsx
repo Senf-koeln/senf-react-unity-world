@@ -22,6 +22,9 @@ import MapNavigation from "./components/MapNavigation";
 import DrawContext from "./components/DrawContext";
 import SaveModal from "./components/SaveModal";
 
+import "./firebase";
+import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
+
 const unityContext = new UnityContext({
   loaderUrl: "WebGLBuild_v5/WebGLBuild_v5.loader.js",
   dataUrl: "WebGLBuild_v5/WebGLBuild_v5.data",
@@ -188,17 +191,19 @@ const App = () => {
     }, 600);
 
     setTimeout(() => {
-      unityContext.send("BuildingManager", "FinishToStreetView");
+      unityContext.send("BuildingManager", "SwitchToStreetView");
 
-      const data2 = unityContext.takeScreenshot("image/jpeg", 1.0);
-      if (data2 !== null) {
-        const src = data2;
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", src, true);
-        xhr.responseType = "blob";
-        xhr.onload = downloadImageToLocal;
-        xhr.send();
-      }
+      setTimeout(() => {
+        const data2 = unityContext.takeScreenshot("image/jpeg", 1.0);
+        if (data2 !== null) {
+          const src = data2;
+          let xhr = new XMLHttpRequest();
+          xhr.open("GET", src, true);
+          xhr.responseType = "blob";
+          xhr.onload = downloadImageToLocal;
+          xhr.send();
+        }
+      }, 100);
     }, 1200);
 
     unityContext.send("BuildingManager", "setTextInput");
@@ -220,6 +225,8 @@ const App = () => {
     dlLink.download = fileName;
 
     document.body.insertAdjacentElement("beforeEnd", dlLink);
+    handleImageUpload(dlLink.download);
+
     dlLink.click();
     dlLink.remove();
 
@@ -227,6 +234,58 @@ const App = () => {
     //   window.URL.revokeObjectURL(dataUrl);
     // }, 1000);
   }
+
+  const handleImageUpload = async (file) => {
+    const storage = getStorage();
+    const storageRef = ref(storage, "images/mountains.jpeg");
+
+    // Create file metadata including the content type
+    /** @type {any} */
+    const metadata = {
+      contentType: "image/jpeg",
+    };
+
+    // Upload the file and metadata
+    const uploadTask = uploadBytes(storageRef, file, metadata);
+  };
+
+  // async function handleImageUpload(document) {
+  //   const options = {
+  //     maxSizeMB: 0.2,
+  //     maxWidthOrHeight: 700,
+  //     useWebWorker: true,
+  //   };
+  //   console.log("Started");
+  //   try {
+
+  //     // 'file' comes from the Blob or File API
+  //     await uploadBytes(storageRef, document).then((snapshot) => {
+  //       console.log("Uploaded a blob or file!");
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  };
 
   return (
     <ThemeProvider theme={theme}>
