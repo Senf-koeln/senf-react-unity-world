@@ -16,7 +16,7 @@ import {
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  height: 335px;
+  height: ${({ objectType }) => (objectType === "Street" ? "455px" : "335px")};
   width: 200px;
   border-radius: 18px;
   margin: 10px;
@@ -39,6 +39,7 @@ const tags = [
 
 const ContextSidebar = ({
   unityContext,
+  objectType,
   openContextSidebar,
   setOpenContextSidebar,
 }) => {
@@ -54,27 +55,35 @@ const ContextSidebar = ({
 
   const setScale = (value) => {
     if (value === "up") {
-      const newValue = scaleRangeValue + 0.5;
-      setScaleRangeValue(newValue);
-      unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
+      unityContext.send("BuildingManager", "ScaleSliderUpdate", +0.5);
     } else if (value === "down") {
-      const newValue = scaleRangeValue - 0.5;
-      setScaleRangeValue(newValue);
-      unityContext.send("BuildingManager", "ScaleSliderUpdate", newValue);
+      unityContext.send("BuildingManager", "ScaleSliderUpdate", -0.5);
     }
   };
 
   const setRotate = (value) => {
     if (value === "up") {
-      const newValue = rotateRangeValue - 5;
-      setRotateRangeValue(newValue);
-      unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
+      unityContext.send("BuildingManager", "RotateSliderUpdate", 1);
     } else if (value === "down") {
-      const newValue = rotateRangeValue + 5;
-      setRotateRangeValue(newValue);
-      unityContext.send("BuildingManager", "RotateSliderUpdate", newValue);
+      unityContext.send("BuildingManager", "RotateSliderUpdate", -1);
     }
   };
+
+  function scaleStreetWidth(value) {
+    if (value === "up") {
+      unityContext.send("BuildingManager", "ScaleStreetWidth", 0.1);
+    } else if (value === "down") {
+      unityContext.send("BuildingManager", "ScaleStreetWidth", -0.1);
+    }
+  }
+
+  function scaleStreetLength(value) {
+    if (value === "up") {
+      unityContext.send("BuildingManager", "ScaleStreetLength", -1);
+    } else if (value === "down") {
+      unityContext.send("BuildingManager", "ScaleStreetLength", +1);
+    }
+  }
 
   function deleteObject() {
     unityContext.send("BuildingManager", "DestroyObject");
@@ -87,27 +96,86 @@ const ContextSidebar = ({
   }
 
   return (
-    <Wrapper openContextSidebar>
-      <FlexWrapper
-        justifyContent="center"
-        margin="20px"
-        width="calc(100% - 40px)"
-      >
-        <Typography variant="h3">Größe </Typography>
-      </FlexWrapper>
-      <FlexWrapper
-        justifyContent="center"
-        margin="20px"
-        width="calc(100% - 40px)"
-        gap="10px"
-      >
-        <Button
-          variant="primary"
-          icon="minus"
-          onClick={() => setScale("down")}
-        />
-        <Button variant="primary" icon="plus" onClick={() => setScale("up")} />
-      </FlexWrapper>
+    <Wrapper openContextSidebar objectType={objectType}>
+      {objectType === "Street" ? (
+        <React.Fragment>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+          >
+            <Typography variant="h3">Länge ändern </Typography>
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+            gap="10px"
+          >
+            <Button
+              variant="primary"
+              icon="minus"
+              onClick={() => scaleStreetLength("down")}
+            />
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => scaleStreetLength("up")}
+            />
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+          >
+            <Typography variant="h3">Breite ändern </Typography>
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+            gap="10px"
+          >
+            <Button
+              variant="primary"
+              icon="minus"
+              onClick={() => scaleStreetWidth("down")}
+            />
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => scaleStreetWidth("up")}
+            />
+          </FlexWrapper>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+          >
+            <Typography variant="h3">Größe </Typography>
+          </FlexWrapper>
+          <FlexWrapper
+            justifyContent="center"
+            margin="20px"
+            width="calc(100% - 40px)"
+            gap="10px"
+          >
+            <Button
+              variant="primary"
+              icon="minus"
+              onClick={() => setScale("down")}
+            />
+            <Button
+              variant="primary"
+              icon="plus"
+              onClick={() => setScale("up")}
+            />
+          </FlexWrapper>
+        </React.Fragment>
+      )}
 
       <FlexWrapper
         justifyContent="center"
@@ -116,7 +184,6 @@ const ContextSidebar = ({
       >
         <Typography variant="h3">Drehen </Typography>
       </FlexWrapper>
-
       <FlexWrapper
         justifyContent="center"
         gap="10px"
@@ -136,7 +203,6 @@ const ContextSidebar = ({
           onClick={() => setRotate("up")}
         />
       </FlexWrapper>
-
       {/* <FlexWrapper
         justifyContent="center"
         margin="20px"

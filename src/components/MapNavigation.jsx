@@ -31,27 +31,35 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const MapNavigation = ({ unityContext }) => {
+const MapNavigation = ({ unityContext, activeView }) => {
   const [zoomvalue, setZoomValue] = useState(1);
   // float zoomvalue is added or subtracted from current cam FOV. positive value means zooming out, negative value zoom in. 2 might be a good value. I set boundaries for FOV in Unity, can ony be between 21 and 60
   function zoomOut() {
-    const newZoomvalue = zoomvalue + 2;
-    setZoomValue(newZoomvalue);
-    unityContext.send("BuildingManager", "zoom", newZoomvalue);
+    unityContext.send("BuildingManager", "zoom", +2);
   }
 
   function zoomIn() {
-    const newZoomvalue = zoomvalue - 2;
-    setZoomValue(newZoomvalue);
-    unityContext.send("BuildingManager", "zoom", newZoomvalue);
+    unityContext.send("BuildingManager", "zoom", -2);
   }
 
   function rotateLeft() {
-    unityContext.send("BuildingManager", "rotateLeft", 10);
+    if (activeView === "SwitchToStreetView") {
+      unityContext.send("BuildingManager", "SwitchToNextCamPos", -1);
+    } else {
+      unityContext.send("BuildingManager", "rotateLeft", 10);
+    }
   }
 
   function rotateRight() {
-    unityContext.send("BuildingManager", "rotateRight", 10);
+    if (activeView === "SwitchToStreetView") {
+      unityContext.send("BuildingManager", "SwitchToNextCamPos", 1);
+    } else {
+      unityContext.send("BuildingManager", "rotateRight", 10);
+    }
+  }
+
+  function SwitchCamPos(direction) {
+    //-1 nach links +1 nach rechts
   }
 
   return (

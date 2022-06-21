@@ -32,8 +32,19 @@ const Wrapper = styled.div`
 `;
 
 const DrawContext = ({ unityContext, stopDrawingStreet }) => {
+  const [startedErase, setStartedErase] = useState(false);
   function deleteCurrentLine() {
     unityContext.send("DrawManager", "deleteCurrentLine");
+  }
+
+  function StartErase() {
+    setStartedErase(true);
+    unityContext.send("DrawManager", "StartErase");
+  }
+  function StopErase() {
+    setStartedErase(false);
+    unityContext.send("DrawManager", "StopErase");
+    unityContext.send("DrawManager", "StartBrush");
   }
 
   return (
@@ -45,9 +56,9 @@ const DrawContext = ({ unityContext, stopDrawingStreet }) => {
         width="calc(100% - 30px)"
         height="calc(100% - 20px)"
       >
-        <Typography variant="h3">Weg einzeichnen</Typography>
+        <Typography variant="h3">Rasen streuen</Typography>
         <FlexWrapper
-          justifyContent="space-between"
+          justifyContent="flex-end"
           alignItems="center"
           gap="10px"
           width="200px"
@@ -55,8 +66,8 @@ const DrawContext = ({ unityContext, stopDrawingStreet }) => {
           <Button
             variant="secondary"
             fillWidth={true}
-            text="Rückgängig"
-            onClick={deleteCurrentLine}
+            text={startedErase ? "Rasen" : "Radieren"}
+            onClick={startedErase ? StopErase : StartErase}
           />
           <Button
             variant="primary"

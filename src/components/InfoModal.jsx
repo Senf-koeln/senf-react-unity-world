@@ -36,7 +36,7 @@ const InfoModal = ({ unityContext, openInfoModal, setOpenInfoModal }) => {
   }, []);
 
   function startgame() {
-    unityContext.send("BuildingManager", "startGame");
+    // unityContext.send("BuildingManager", "startGame");
     unityContext.send("BuildingManager", "setTextInput");
 
     setOpenInfoModal(false);
@@ -57,7 +57,7 @@ const InfoModal = ({ unityContext, openInfoModal, setOpenInfoModal }) => {
         height="calc(100% - 80px)"
       >
         <Typography variant="h2" style={{ textAlign: "center" }}>
-          Gestalte deinen öffentlichen Raum
+          Gestalte die Blücherstraße nach deinen Vorstellungen
         </Typography>
       </FlexWrapper>
       <FlexWrapper
@@ -73,9 +73,8 @@ const InfoModal = ({ unityContext, openInfoModal, setOpenInfoModal }) => {
           spielerisch an stadtplanerischen Prozessen teilzunehmen.
           <br />
           <br />
-          Am Beispiel des Breslauer Platzes kannst du das Spiel jetzt testen.
-          Zeig uns, was du dir wünschen würdest, wenn das Musical Dome abgebaut
-          wird.
+          Am Beispiel der Blücherstraße kannst du das Spiel jetzt testen. Zeig
+          uns, was du dir wünschen würdest!
         </Typography>
       </FlexWrapper>
       <FlexWrapper
@@ -83,12 +82,12 @@ const InfoModal = ({ unityContext, openInfoModal, setOpenInfoModal }) => {
         margin="20px"
         width="calc(100% - 40px)"
       >
-        <Card>
+        {/* <Card>
           <img src={Img1} width="80px" />
           <Typography variant="buttonSm" style={{ textAlign: "center" }}>
             Platz schaffen
           </Typography>
-        </Card>{" "}
+        </Card>{" "} */}
         <Card>
           <img src={Img2} width="80px" />
 

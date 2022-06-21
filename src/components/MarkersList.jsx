@@ -14,6 +14,11 @@ import {
 } from "senf-atomic-design-system";
 
 import Weg from "../assets/surfaces/weg.png";
+import Weg_pedestrian from "../assets/surfaces/Weg_Pedestrian.png";
+import Weg_Bike from "../assets/surfaces/Weg_Bike.png";
+import Weg_Car from "../assets/surfaces/Weg_Car.png";
+import Zebrastreifen from "../assets/surfaces/Zebrastreifen.png";
+
 import Img57 from "../assets/surfaces/57.png";
 
 const MarkersList = ({
@@ -26,22 +31,52 @@ const MarkersList = ({
     <React.Fragment>
       <ObjectCard
         loading={false}
-        handleButtonClick={() => spawnObject(57)}
+        handleButtonClick={() => startDrawingStreet()}
         data={{
           objectId: 57,
-          title: "Gras",
+          title: "Rasen",
           objectType: "surface",
           imgUrl: Img57,
         }}
       />
       <ObjectCard
         loading={false}
-        handleButtonClick={startDrawingStreet}
+        handleButtonClick={() => spawnObject(58)}
         data={{
-          objectId: 1000,
-          title: "Weg",
+          objectId: 58,
+          title: "Fahrradweg",
           objectType: "surface",
-          imgUrl: Weg,
+          imgUrl: Weg_Bike,
+        }}
+      />
+      <ObjectCard
+        loading={false}
+        handleButtonClick={() => spawnObject(60)}
+        data={{
+          objectId: 60,
+          title: "Autospur",
+          objectType: "surface",
+          imgUrl: Weg_Car,
+        }}
+      />
+      <ObjectCard
+        loading={false}
+        handleButtonClick={() => spawnObject(59)}
+        data={{
+          objectId: 59,
+          title: "Fußgängerweg",
+          objectType: "surface",
+          imgUrl: Weg_pedestrian,
+        }}
+      />
+      <ObjectCard
+        loading={false}
+        handleButtonClick={() => spawnObject(61)}
+        data={{
+          objectId: 61,
+          title: "Zebrastreifen",
+          objectType: "surface",
+          imgUrl: Zebrastreifen,
         }}
       />
 

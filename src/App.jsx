@@ -22,6 +22,9 @@ import MapNavigation from "./components/MapNavigation";
 import DrawContext from "./components/DrawContext";
 import SaveModal from "./components/SaveModal";
 
+import "./firebase";
+import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
+
 const unityContext = new UnityContext({
   loaderUrl: "WebGLBuild_v5/WebGLBuild_v5.loader.js",
   dataUrl: "WebGLBuild_v5/WebGLBuild_v5.data",
@@ -93,7 +96,7 @@ const App = () => {
   const [saved, setSaved] = useState(false);
 
   const [description, setDescription] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
 
   function restart() {
     var answer = window.confirm(
@@ -101,7 +104,6 @@ const App = () => {
     );
     if (answer) {
       unityContext.send("BuildingManager", "restart");
-      setIsMusicDomeDeleted(false);
       setOpenInfoModal(true);
       setSaved(false);
       setOpenSaveModal(false);
@@ -112,45 +114,27 @@ const App = () => {
     }
   }
 
-  function startDrawingStreet() {
+  function startDrawingStreet(index) {
     //Solang gezeichnet wird, dafür sorgen, dass die kamera perspektive nicht gewechselt werden kann
-    unityContext.send("DrawManager", "StartDrawing");
+
+    unityContext.send("DrawManager", "StartBrush");
+    unityContext.send("BuildingManager", "SwitchToTopView");
+
     setActiveView("SwitchToTopView");
     setOpenDrawContext(true);
-
-    // setTimeout(() => {
-    //   setComponentsSidebarOpen(false);
-    // }, 200);
   }
 
   function stopDrawingStreet() {
-    unityContext.send("DrawManager", "StopDrawing");
+    unityContext.send("DrawManager", "StopBrush");
     setOpenDrawContext(false);
   }
 
-  function deleteMusicDome() {
-    unityContext.send("BuildingManager", "musicDomeDeletion");
-  }
-
-  //bool ob music dome delete me gedrückt wurde
-  const [musicDomeDeleted, setIsMusicDomeDeleted] = useState(false);
-  useEffect(function () {
-    unityContext.on("isMusicDomeDeleted", function (isDeleted) {
-      if (isDeleted) {
-        setIsMusicDomeDeleted(isDeleted);
-        setTimeout(() => {
-          setComponentsSidebarOpen(true);
-        }, 500);
-      }
-    });
-  }, []);
-
   //im isObjectActive listener den String Objecttype ergänzt Werte: "Form", "Model" oder "Marker"
-  const [Object, setObject] = useState("");
+  const [objectType, setObjectType] = useState("");
   useEffect(function () {
     unityContext.on("isObjActive", function (isActive, objecttype) {
       setIsObjSelected(isActive);
-      setObject(objecttype);
+      setObjectType(objecttype);
       if (isActive) {
         setOpenContextSidebar(true);
 
@@ -168,7 +152,7 @@ const App = () => {
   function handInProposal() {
     const element = document.createElement("a");
     const file = new Blob(
-      ["email:\n\n" + email + "\n\n\n" + "Beschreibung:\n\n" + description],
+      ["name:\n\n" + name + "\n\n\n" + "Beschreibung:\n\n" + description],
       {
         type: "text/plain",
       }
@@ -179,7 +163,7 @@ const App = () => {
     element.click();
 
     setTimeout(() => {
-      unityContext.send("BuildingManager", "SwitchToTopView");
+      unityContext.send("BuildingManager", "FinishToTopView");
 
       const data = unityContext.takeScreenshot("image/jpeg", 1.0);
       if (data !== null) {
@@ -193,7 +177,7 @@ const App = () => {
     }, 100);
 
     setTimeout(() => {
-      unityContext.send("BuildingManager", "SwitchToNormalView");
+      unityContext.send("BuildingManager", "FinishNormalView");
 
       const data1 = unityContext.takeScreenshot("image/jpeg", 1.0);
       if (data1 !== null) {
@@ -209,21 +193,23 @@ const App = () => {
     setTimeout(() => {
       unityContext.send("BuildingManager", "SwitchToStreetView");
 
-      const data2 = unityContext.takeScreenshot("image/jpeg", 1.0);
-      if (data2 !== null) {
-        const src = data2;
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", src, true);
-        xhr.responseType = "blob";
-        xhr.onload = downloadImageToLocal;
-        xhr.send();
-      }
-    }, 1000);
+      setTimeout(() => {
+        const data2 = unityContext.takeScreenshot("image/jpeg", 1.0);
+        if (data2 !== null) {
+          const src = data2;
+          let xhr = new XMLHttpRequest();
+          xhr.open("GET", src, true);
+          xhr.responseType = "blob";
+          xhr.onload = downloadImageToLocal;
+          xhr.send();
+        }
+      }, 100);
+    }, 1200);
 
     unityContext.send("BuildingManager", "setTextInput");
     setTimeout(() => {
       setSaved(true);
-    }, 1000);
+    }, 2000);
   }
 
   function downloadImageToLocal() {
@@ -239,6 +225,8 @@ const App = () => {
     dlLink.download = fileName;
 
     document.body.insertAdjacentElement("beforeEnd", dlLink);
+    handleImageUpload(dlLink.download);
+
     dlLink.click();
     dlLink.remove();
 
@@ -247,11 +235,63 @@ const App = () => {
     // }, 1000);
   }
 
+  const handleImageUpload = async (file) => {
+    const storage = getStorage();
+    const storageRef = ref(storage, "images/mountains.jpeg");
+
+    // Create file metadata including the content type
+    /** @type {any} */
+    const metadata = {
+      contentType: "image/jpeg",
+    };
+
+    // Upload the file and metadata
+    const uploadTask = uploadBytes(storageRef, file, metadata);
+  };
+
+  // async function handleImageUpload(document) {
+  //   const options = {
+  //     maxSizeMB: 0.2,
+  //     maxWidthOrHeight: 700,
+  //     useWebWorker: true,
+  //   };
+  //   console.log("Started");
+  //   try {
+
+  //     // 'file' comes from the Blob or File API
+  //     await uploadBytes(storageRef, document).then((snapshot) => {
+  //       console.log("Uploaded a blob or file!");
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Sidebars
-        musicDomeDeleted={musicDomeDeleted}
+        musicDomeDeleted={true}
         openInfoModal={openInfoModal}
         openDrawContext={openDrawContext}
         openSaveModal={openSaveModal}
@@ -269,7 +309,7 @@ const App = () => {
         <ComponentsSidebar
           unityContext={unityContext}
           componentsSidebarOpen={componentsSidebarOpen}
-          musicDomeDeleted={musicDomeDeleted}
+          musicDomeDeleted={true}
           openInfoModal={openInfoModal}
           openDrawContext={openDrawContext}
           openSaveModal={openSaveModal}
@@ -290,6 +330,7 @@ const App = () => {
       {openContextSidebar && (
         <ContextSidebar
           unityContext={unityContext}
+          objectType={objectType}
           openContextSidebar={openContextSidebar}
           setOpenContextSidebar={setOpenContextSidebar}
         />
@@ -302,8 +343,8 @@ const App = () => {
         />
       )}
 
-      {musicDomeDeleted && !openInfoModal && (
-        <MapNavigation unityContext={unityContext} />
+      {!openInfoModal && (
+        <MapNavigation unityContext={unityContext} activeView={activeView} />
       )}
 
       <SaveModal
@@ -312,24 +353,11 @@ const App = () => {
         setOpenSaveModal={setOpenSaveModal}
         handInProposal={handInProposal}
         setDescription={setDescription}
-        setEmail={setEmail}
+        setName={setName}
         setOpenContextSidebar={setOpenContextSidebar}
         saved={saved}
         restart={restart}
       />
-
-      <DeleteButtonWrapper
-        musicDomeDeleted={musicDomeDeleted}
-        openInfoModal={openInfoModal}
-      >
-        <RoundedButton
-          color={"rgb(226,183,54)"}
-          icon="plus"
-          onClick={deleteMusicDome}
-          size="big"
-          variant={!componentsSidebarOpen ? "primary" : undefined}
-        />
-      </DeleteButtonWrapper>
     </ThemeProvider>
   );
 };
